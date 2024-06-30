@@ -5,10 +5,10 @@ FROM base as deps
 
 WORKDIR /app
 
-ADD package.json ./
+COPY . .
 
 RUN npm install -g pnpm && pnpm install
 
 EXPOSE 3333
 
-CMD [ "pnpm" ]
+CMD [ "pnpm", "dev" ]
