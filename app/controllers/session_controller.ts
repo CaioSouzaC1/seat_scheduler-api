@@ -6,9 +6,9 @@ import hash from '@adonisjs/core/services/hash'
 
 @inject()
 export default class SessionController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
-  async login({ request, response, auth }: HttpContext) {
+  async login({ request, response }: HttpContext) {
     const { email, password } = await authSesssionValidator.validate(request.body())
 
     const user = await this.userService.findByEmail({ email })
@@ -22,6 +22,10 @@ export default class SessionController {
     if (!isPasswordValid) {
       response.abort('Invalid credentials')
     }
+
+    await this.userService.countLogin(user!)
+
+    await this.userService.countLogin(user!)
 
     const token = await this.userService.createToken(user!)
 

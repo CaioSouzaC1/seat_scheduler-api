@@ -3,7 +3,6 @@ version: '3.7'
 services:
   postgres:
     image: postgres:16.3
-    restart: always
     ports:
       - 5432:5432
     environment:
@@ -13,18 +12,18 @@ services:
     networks:
       - system
 
-  node:
-    build:
-      context: .
-    restart: always
-    depends_on:
-      - postgres
-    ports:
-      - 3000:3333
-    volumes:
-      - ./:/app
-    networks:
-      - system
+  # node:
+  #   build:
+  #     context: .
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - 3000:3333
+  #   volumes:
+  #     - ./:/app
+  #   networks:
+  #     - system
 
 networks:
   system:
+    driver: bridge

@@ -1,6 +1,7 @@
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
 import { UserHasTypeService } from './user_has_type_service.js'
+import { DateTime } from 'luxon'
 
 type StoreUserRequest = {
   email: string
@@ -59,5 +60,21 @@ export class UserService {
     const token = await User.accessTokens.create(user)
 
     return token
+  }
+
+  async countLogin(user: User) {
+    const userOnDatabase = await User.find(user.id)
+
+    userOnDatabase!.loginCount += 1
+
+    await user.save()
+  }
+
+  async lastLogin(user: User) {
+    const userOnDatabase = await User.find(user.id)
+
+    userOnDatabase!.lastLogin = DateTime.now().toLocaleString({ timeZone: 'BRT' })
+
+    await userOnDatabase!.save()
   }
 }

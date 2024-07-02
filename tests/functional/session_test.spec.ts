@@ -41,10 +41,12 @@ test.group('Session test', (group) => {
     }
 
     const login = await client.post('/login').json(body)
+
     const { token } = login.body()
 
-    const result = await client.get('/me').header('Authorization', `${token.type} ${token.token}`)
+    const result = await client.get('/me').bearerToken(token.token)
 
     result.assertStatus(200)
+    result.assertBodyContains({ id: String })
   })
 })

@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.timestamp('updated_at').nullable()
 
       table.string('last_login').nullable()
-      table.string('login_count').nullable()
+      table.integer('login_count').nullable()
       table.string('image_path').nullable()
     })
   }
