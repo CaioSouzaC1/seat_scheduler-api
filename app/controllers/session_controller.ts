@@ -23,7 +23,7 @@ export default class SessionController {
 
     await this.userService.countLogin(user!)
 
-    // await this.userService.lastLogin(user!)
+    await this.userService.lastLogin(user!)
 
     const token = await this.userService.createToken(user!)
 

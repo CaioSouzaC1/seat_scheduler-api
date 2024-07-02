@@ -49,6 +49,7 @@ test.group('Session test', (group) => {
     const result = await client.get('/me').bearerToken(token.token)
 
     result.assertStatus(200)
+
     result.assertBodyContains({ id: String })
   })
 })

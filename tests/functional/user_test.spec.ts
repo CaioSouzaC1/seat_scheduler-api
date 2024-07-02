@@ -9,6 +9,7 @@ test.group('User test', (group) => {
 
   test('[POST] /users', async ({ client, assert }) => {
     const type = await UserType.create({ name: 'admin' })
+
     const body = {
       email: 'johndoe@gmail.com',
       name: 'john doe',

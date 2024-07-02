@@ -62,7 +62,7 @@ export class UserService {
   async lastLogin(user: User) {
     const userOnDatabase = await User.find(user.id)
 
-    userOnDatabase!.lastLogin = DateTime.now().toLocaleString({ timeZone: 'BRT' })
+    userOnDatabase!.lastLogin = DateTime.now().setLocale('pt-BR').toLocaleString()
 
     await userOnDatabase!.save()
   }
