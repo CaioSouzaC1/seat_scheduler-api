@@ -2,26 +2,15 @@ import User from '#models/user'
 import { inject } from '@adonisjs/core'
 import { UserHasTypeService } from './user_has_type_service.js'
 import { DateTime } from 'luxon'
-
-type StoreUserRequest = {
-  email: string
-  name: string
-  phone: string
-  password: string
-  typeId: string
-}
-
-type ShowUserRequest = {
-  userId: string
-}
-
-type FindByEmailUserRequest = {
-  email: string
-}
+import {
+  FindByEmailUserRequest,
+  ShowUserRequest,
+  StoreUserRequest,
+} from '../interfaces/Requests/User/index.js'
 
 @inject()
 export class UserService {
-  constructor(private userHasTypeService: UserHasTypeService) { }
+  constructor(private userHasTypeService: UserHasTypeService) {}
 
   async store({ name, password, phone, email, typeId }: StoreUserRequest): Promise<User> {
     const user = await User.create({
