@@ -3,7 +3,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Address extends BaseModel {
   @column({ isPrimary: true })
-  declare id: string
+  declare id: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
