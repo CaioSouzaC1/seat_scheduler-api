@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import type { Authenticators } from '@adonisjs/auth/types'
+import { errors } from '@adonisjs/auth'
+import ReturnApi from '../utils/return_api.js'
 
 /**
  * Auth middleware is used authenticate HTTP requests and deny
@@ -13,13 +15,19 @@ export default class AuthMiddleware {
   redirectTo = '/login'
 
   async handle(
-    { auth }: HttpContext,
+    { auth, response }: HttpContext,
     next: NextFn,
     options: {
       guards?: (keyof Authenticators)[]
     } = {}
   ) {
-    await auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo })
-    return next()
+    try {
+      await auth.authenticateUsing(options.guards)
+      await next()
+    } catch (err) {
+      if (err instanceof errors.E_UNAUTHORIZED_ACCESS) {
+        ReturnApi.error({ response, code: 401, message: 'Não autorizado' })
+      }
+    }
   }
 }
