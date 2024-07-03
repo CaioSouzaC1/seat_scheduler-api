@@ -6,27 +6,48 @@ import ReturnApi from '../utils/return_api.js'
 
 @inject()
 export default class UsersController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
   /**
    * Display a list of resource
    */
-  async index({}: HttpContext) {}
-
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
+  async index({ }: HttpContext) { }
 
   /**
    * Handle form submission for the create action
    */
   async store({ request, response }: HttpContext) {
-    const { email, name, phone, password, typeId } = await storeUserValidation.validate(
-      request.body()
-    )
+    const {
+      email,
+      name,
+      phone,
+      password,
+      typeId,
+      cep,
+      city,
+      state,
+      number,
+      street,
+      country,
+      complement,
+      neighborhood,
+    } = await storeUserValidation.validate(request.body())
 
     try {
-      const user = await this.userService.store({ email, name, phone, password, typeId })
+      const user = await this.userService.store({
+        email,
+        name,
+        phone,
+        password,
+        typeId,
+        cep,
+        city,
+        state,
+        number,
+        street,
+        country,
+        neighborhood,
+        complement,
+      })
 
       return ReturnApi.success({
         response,
@@ -34,7 +55,8 @@ export default class UsersController {
         code: 201,
         message: 'Usuário criado com sucesso!',
       })
-    } catch {
+    } catch (err) {
+      console.error(err)
       return ReturnApi.error({
         response,
         message: 'Error ao Usuário criar!',
@@ -46,20 +68,20 @@ export default class UsersController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  async show({ params }: HttpContext) { }
 
   /**
    * Edit individual record
    */
-  async edit({ params }: HttpContext) {}
+  async edit({ params }: HttpContext) { }
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request }: HttpContext) {}
+  async update({ params, request }: HttpContext) { }
 
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params }: HttpContext) { }
 }

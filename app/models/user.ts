@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, hasOne } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { randomUUID } from 'node:crypto'
@@ -28,10 +28,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare lastLogin: string
 
   @column({ columnName: 'login_count' })
-  declare loginCount: string
+  declare loginCount: number
 
   @column({ serializeAs: null })
   declare password: string
+
+  @column()
+  declare addressId: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

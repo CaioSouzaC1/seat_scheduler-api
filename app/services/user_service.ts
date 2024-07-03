@@ -3,17 +3,43 @@ import { inject } from '@adonisjs/core'
 import { UserHasTypeService } from './user_has_type_service.js'
 import { DateTime } from 'luxon'
 import {
-  FindByEmailUserRequest,
-  ShowUserRequest,
-  StoreUserRequest,
+  IFindByEmailUserRequest,
+  IUserIdRequest,
+  IStoreUserRequest,
 } from '../interfaces/Requests/User/index.js'
+import Address from '#models/address'
 
 @inject()
 export class UserService {
-  constructor(private userHasTypeService: UserHasTypeService) {}
+  constructor(private userHasTypeService: UserHasTypeService) { }
 
-  async store({ name, password, phone, email, typeId }: StoreUserRequest): Promise<User> {
-    const user = await User.create({
+  async store({
+    name,
+    password,
+    phone,
+    email,
+    typeId,
+    neighborhood,
+    complement,
+    country,
+    street,
+    number,
+    state,
+    city,
+    cep,
+  }: IStoreUserRequest): Promise<User> {
+    const address = await Address.create({
+      neighborhood,
+      complement,
+      country,
+      street,
+      number,
+      state,
+      city,
+      cep,
+    })
+
+    const user = await address.related('user').create({
       email,
       name,
       phone,
@@ -25,7 +51,7 @@ export class UserService {
     return user
   }
 
-  async show({ userId }: ShowUserRequest): Promise<User | null> {
+  async show({ userId }: IUserIdRequest): Promise<User | null> {
     const user = await User.find(userId)
 
     if (!user) {
@@ -35,7 +61,7 @@ export class UserService {
     return user
   }
 
-  async findByEmail({ email }: FindByEmailUserRequest): Promise<User | null> {
+  async findByEmail({ email }: IFindByEmailUserRequest): Promise<User | null> {
     const user = await User.findBy('email', email)
 
     if (!user) {
@@ -48,15 +74,15 @@ export class UserService {
   async createToken(user: User) {
     const token = await User.accessTokens.create(user)
 
-    return token
+    return token.value!.release()
   }
 
   async countLogin(user: User) {
     const userOnDatabase = await User.find(user.id)
 
-    userOnDatabase!.loginCount += 1
+    userOnDatabase!.loginCount++
 
-    await user.save()
+    await userOnDatabase!.save()
   }
 
   async lastLogin(user: User) {
@@ -65,5 +91,7 @@ export class UserService {
     userOnDatabase!.lastLogin = DateTime.now().setLocale('pt-BR').toLocaleString()
 
     await userOnDatabase!.save()
+
+    return userOnDatabase
   }
 }

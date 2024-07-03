@@ -12,7 +12,7 @@ export default class SessionController {
   async login({ request, response }: HttpContext) {
     const { email, password } = await authSesssionValidator.validate(request.body())
 
-    const user = await this.userService.findByEmail({ email })
+    let user = await this.userService.findByEmail({ email })
 
     if (!user) return ReturnApi.error({ response, message: 'Usuário não encontrado!', code: 400 })
 
@@ -23,7 +23,7 @@ export default class SessionController {
 
     await this.userService.countLogin(user!)
 
-    await this.userService.lastLogin(user!)
+    user = await this.userService.lastLogin(user!)
 
     const token = await this.userService.createToken(user!)
 

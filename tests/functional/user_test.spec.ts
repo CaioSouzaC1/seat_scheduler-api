@@ -16,6 +16,14 @@ test.group('User test', (group) => {
       phone: '123123123',
       password: '123',
       typeId: type.id,
+      cep: '11111111',
+      country: 'Brasil',
+      state: 'SP',
+      city: 'Cruzero',
+      neighborhood: 'Centro',
+      street: 'Av. Jorge',
+      number: 904,
+      complement: '',
     }
 
     const result = await client.post('/users').json(body)

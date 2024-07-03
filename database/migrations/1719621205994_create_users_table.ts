@@ -14,8 +14,10 @@ export default class extends BaseSchema {
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
 
+      table.uuid('address_id').unsigned().references('addresses.id').onDelete('CASCADE')
+
       table.string('last_login').nullable()
-      table.integer('login_count').nullable()
+      table.integer('login_count').defaultTo(0)
       table.string('image_path').nullable()
     })
   }

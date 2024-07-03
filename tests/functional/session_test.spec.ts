@@ -24,7 +24,7 @@ test.group('Session test', (group) => {
     result.assertBodyContains({
       data: {
         user: { email: 'johndoe@mail.com' },
-        token: { token: String },
+        token: String,
       },
     })
   })
@@ -46,7 +46,7 @@ test.group('Session test', (group) => {
 
     const { token } = login.body().data
 
-    const result = await client.get('/me').bearerToken(token.token)
+    const result = await client.get('/me').bearerToken(token)
 
     result.assertStatus(200)
 

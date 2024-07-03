@@ -6,6 +6,15 @@ export const storeUserValidation = vine.compile(
     email: vine.string().email(),
     password: vine.string(),
     phone: vine.string(),
+
+    cep: vine.string(),
+    country: vine.string(),
+    state: vine.string(),
+    city: vine.string(),
+    neighborhood: vine.string(),
+    street: vine.string(),
+    number: vine.number(),
+    complement: vine.string().nullable(),
     typeId: vine
       .string()
       .uuid()
