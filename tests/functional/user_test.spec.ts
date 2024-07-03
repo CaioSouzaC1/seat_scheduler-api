@@ -32,10 +32,10 @@ test.group('User test', (group) => {
 
     const userOnDatabase = await User.first()
 
-    assert.isOk(userOnDatabase.id)
+    assert.isOk(userOnDatabase!.id)
 
     const userHasTypeOnDatabase = await UserHasType.first()
 
-    assert.isOk(userHasTypeOnDatabase.id)
+    assert.isOk(userHasTypeOnDatabase!.id)
   })
 })

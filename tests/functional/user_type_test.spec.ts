@@ -19,6 +19,12 @@ test.group('User type test', (group) => {
 
     result.assertStatus(200)
 
-   // result.assertBodyContains([{ id: String }])
+    result.assertBodyContains({
+      data: [
+        {
+          id: String,
+        },
+      ],
+    })
   })
 })

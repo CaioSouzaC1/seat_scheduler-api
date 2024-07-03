@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
 import { UserHasTypeService } from './user_has_type_service.js'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import {
   IFindByEmailUserRequest,
   IUserIdRequest,
@@ -28,6 +28,7 @@ export class UserService {
     city,
     cep,
   }: IStoreUserRequest): Promise<User> {
+
     const address = await Address.create({
       neighborhood,
       complement,
@@ -86,6 +87,8 @@ export class UserService {
   }
 
   async lastLogin(user: User) {
+    Settings.defaultZone = 'America/Sao_Paulo'
+
     const userOnDatabase = await User.find(user.id)
 
     userOnDatabase!.lastLogin = DateTime.now().setLocale('pt-BR').toLocaleString()
