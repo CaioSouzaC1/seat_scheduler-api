@@ -8,8 +8,8 @@ import {
   IStoreUserRequest,
   IEditUserRequest,
 } from '../interfaces/Requests/User/index.js'
-import Address from '#models/address'
 import { AddressService } from './address_service.js'
+import UserType from '#models/user_type'
 
 @inject()
 export class UserService {
@@ -23,7 +23,6 @@ export class UserService {
     password,
     phone,
     email,
-    typeId,
     neighborhood,
     complement,
     country,
@@ -52,7 +51,9 @@ export class UserService {
       addressId,
     })
 
-    await this.userHasTypeService.store({ typeId, userId: user.id })
+    const type = await UserType.findBy('name', 'operator')
+
+    await this.userHasTypeService.store({ typeId: type.id, userId: user.id })
 
     return user
   }

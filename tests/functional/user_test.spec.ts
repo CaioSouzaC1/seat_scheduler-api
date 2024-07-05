@@ -10,7 +10,7 @@ test.group('User test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /users', async ({ client, assert }) => {
-    const type = await UserType.create({ name: 'admin' })
+    const type = await UserType.create({ name: 'operator' })
 
     const body = {
       email: 'johndoe@gmail.com',

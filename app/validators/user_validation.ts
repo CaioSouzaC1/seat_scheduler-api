@@ -14,15 +14,10 @@ export const storeUserValidation = vine.compile(
     neighborhood: vine.string(),
     street: vine.string(),
     number: vine.number(),
-    complement: vine.string().nullable(),
-
-    typeId: vine
+    complement: vine
       .string()
-      .uuid()
-      .exists(async (db, value) => {
-        const type = await db.from('user_types').where('id', value).first()
-        return type ? true : false
-      }),
+      .optional()
+      .transform((value) => (value ? value : null)),
   })
 )
 
@@ -40,14 +35,9 @@ export const updateUserValidation = vine.compile(
     neighborhood: vine.string().optional(),
     street: vine.string().optional(),
     number: vine.number().optional(),
-    complement: vine.string().nullable().optional(),
-    typeId: vine
+    complement: vine
       .string()
-      .uuid()
-      .exists(async (db, value) => {
-        const type = await db.from('user_types').where('id', value).first()
-        return type ? true : false
-      })
-      .optional(),
+      .optional()
+      .transform((value) => (value ? value : null)),
   })
 )

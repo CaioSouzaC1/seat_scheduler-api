@@ -3,7 +3,6 @@ export interface IStoreUserRequest {
   name: string
   phone: string
   password: string
-  typeId: string
   cep: string
   country: string
   state: string
@@ -20,7 +19,6 @@ export interface IEditUserRequest {
   name?: string
   phone?: string
   password?: string
-  typeId?: string
   cep?: string
   country?: string
   state?: string
