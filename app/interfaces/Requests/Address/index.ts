@@ -6,7 +6,19 @@ export interface IStoreAddressRequest {
   neighborhood: string
   street: string
   number: number
-  complement: number
+  complement: string | null
+}
+
+export interface IEditAddressRequest {
+  addressId: string
+  cep?: string
+  country?: string
+  state?: string
+  city?: string
+  neighborhood?: string
+  street?: string
+  number?: number
+  complement?: string | null
 }
 
 export interface IAddressIdRequest {

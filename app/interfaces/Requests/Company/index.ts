@@ -1,9 +1,6 @@
-export interface IStoreUserRequest {
-  email: string
+export interface IStoreCompanyRequest {
   name: string
-  phone: string
-  password: string
-  typeId: string
+  cnpj: string
   cep: string
   country: string
   state: string
@@ -12,15 +9,15 @@ export interface IStoreUserRequest {
   street: string
   number: number
   complement: string | null
+
+  userId: string
 }
 
-export interface IEditUserRequest {
+export interface IEditCompanyRequest {
+  companyId: string
   userId: string
-  email?: string
   name?: string
-  phone?: string
-  password?: string
-  typeId?: string
+  cnpj?: string
   cep?: string
   country?: string
   state?: string
@@ -31,10 +28,7 @@ export interface IEditUserRequest {
   complement?: string | null
 }
 
-export interface IUserIdRequest {
+export interface ICompanyId {
+  companyId: string
   userId: string
-}
-
-export interface IFindByEmailUserRequest {
-  email: string
 }

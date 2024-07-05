@@ -6,12 +6,17 @@ import {
   IFindByEmailUserRequest,
   IUserIdRequest,
   IStoreUserRequest,
+  IEditUserRequest,
 } from '../interfaces/Requests/User/index.js'
 import Address from '#models/address'
+import { AddressService } from './address_service.js'
 
 @inject()
 export class UserService {
-  constructor(private userHasTypeService: UserHasTypeService) { }
+  constructor(
+    private userHasTypeService: UserHasTypeService,
+    private addressService: AddressService
+  ) { }
 
   async store({
     name,
@@ -28,8 +33,7 @@ export class UserService {
     city,
     cep,
   }: IStoreUserRequest): Promise<User> {
-
-    const address = await Address.create({
+    const addressId = await this.addressService.store({
       neighborhood,
       complement,
       country,
@@ -40,11 +44,12 @@ export class UserService {
       cep,
     })
 
-    const user = await address.related('user').create({
+    const user = await User.create({
       email,
       name,
       phone,
       password,
+      addressId,
     })
 
     await this.userHasTypeService.store({ typeId, userId: user.id })
@@ -52,8 +57,58 @@ export class UserService {
     return user
   }
 
-  async show({ userId }: IUserIdRequest): Promise<User | null> {
+  async update({
+    userId,
+    email,
+    name,
+    typeId,
+    password,
+    phone,
+    cep,
+    city,
+    state,
+    number,
+    street,
+    country,
+    complement,
+    neighborhood,
+  }: IEditUserRequest) {
     const user = await User.find(userId)
+
+    if (!user) return null
+
+    await this.addressService.update({
+      addressId: user!.addressId,
+      cep,
+      city,
+      state,
+      number,
+      street,
+      country,
+      complement,
+      neighborhood,
+    })
+
+    user.email = email ?? user.email
+    user.name = name ?? user.name
+    user.phone = phone ?? user.phone
+    user.password = password ?? user.password
+
+    if (typeId) await this.userHasTypeService.update({ typeId, userId: user.id })
+
+    await user.save()
+  }
+
+  async delete({ userId }: IUserIdRequest) {
+    const user = await User.find(userId)
+
+    if (!user) return null
+
+    await user.delete()
+  }
+
+  async findByEmail({ email }: IFindByEmailUserRequest): Promise<User | null> {
+    const user = await User.findBy('email', email)
 
     if (!user) {
       return null
@@ -62,8 +117,8 @@ export class UserService {
     return user
   }
 
-  async findByEmail({ email }: IFindByEmailUserRequest): Promise<User | null> {
-    const user = await User.findBy('email', email)
+  async findById({ userId }: IUserIdRequest): Promise<User | null> {
+    const user = await User.find(userId)
 
     if (!user) {
       return null

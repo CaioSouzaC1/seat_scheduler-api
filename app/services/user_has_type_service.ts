@@ -7,6 +7,16 @@ type StoreUserHasTypeRequest = {
 
 export class UserHasTypeService {
   async store({ typeId, userId }: StoreUserHasTypeRequest): Promise<void> {
-    UserHasType.create({ typeId, userId })
+    await UserHasType.create({ typeId, userId })
+  }
+
+  async update({ typeId, userId }: StoreUserHasTypeRequest): Promise<void> {
+    const type = await UserHasType.findBy({ userId: userId, type_id: typeId })
+
+    if (!type) return
+
+    type.typeId = typeId
+
+    await type.save()
   }
 }
