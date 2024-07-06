@@ -16,6 +16,18 @@ export const storeCompanyValidation = vine.compile(
       .string()
       .optional()
       .transform((value) => (value ? value : null)),
+    image: vine
+      .file({
+        size: '10mb',
+        extnames: ['jpg', 'png', 'jpeg'],
+      })
+      .optional(),
+    attachments: vine
+      .object({
+        type: vine.string(),
+        name: vine.string(),
+      })
+      .optional(),
   })
 )
 
@@ -32,6 +44,26 @@ export const editCompanyValidation = vine.compile(
     street: vine.string().optional(),
     number: vine.number().optional(),
     complement: vine.string().nullable().optional(),
+
+    image: vine
+      .file({
+        size: '10mb',
+        extnames: ['jpg', 'png', 'jpeg'],
+      })
+      .optional(),
+    attachments: vine
+      .object({
+        id: vine
+          .string()
+          .uuid()
+          .exists(async (db, value) => {
+            const attach = await db.from('company_attachements').where('id', value).first()
+            return attach ? true : false
+          }),
+        type: vine.string(),
+        name: vine.string(),
+      })
+      .optional(),
 
     params: vine.object({
       id: vine

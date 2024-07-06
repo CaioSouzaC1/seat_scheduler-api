@@ -32,7 +32,7 @@ export class UserService {
     city,
     cep,
   }: IStoreUserRequest): Promise<User> {
-    const addressId = await this.addressService.store({
+    const address = await this.addressService.store({
       neighborhood,
       complement,
       country,
@@ -48,12 +48,13 @@ export class UserService {
       name,
       phone,
       password,
-      addressId,
     })
+
+    await user.related('address').associate(address)
 
     const type = await UserType.findBy('name', 'operator')
 
-    await this.userHasTypeService.store({ typeId: type.id, userId: user.id })
+    await this.userHasTypeService.store({ typeId: type!.id, userId: user.id })
 
     return user
   }
@@ -62,7 +63,6 @@ export class UserService {
     userId,
     email,
     name,
-    typeId,
     password,
     phone,
     cep,
@@ -94,8 +94,6 @@ export class UserService {
     user.name = name ?? user.name
     user.phone = phone ?? user.phone
     user.password = password ?? user.password
-
-    if (typeId) await this.userHasTypeService.update({ typeId, userId: user.id })
 
     await user.save()
   }

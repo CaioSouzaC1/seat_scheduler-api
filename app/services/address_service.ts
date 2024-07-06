@@ -23,7 +23,7 @@ export class AddressService {
       cep,
     })
 
-    return address.id
+    return address
   }
 
   async update({

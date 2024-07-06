@@ -8,15 +8,31 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
+import { CompanyattachementService } from '#services/company_attachement_service'
 
 @inject()
 export default class CompaniesController {
-  constructor(private companyService: CompanyService) { }
+  constructor(
+    private companyService: CompanyService,
+    private attachmentService: CompanyattachementService
+  ) { }
 
   async store({ response, request, auth }: HttpContext) {
     try {
-      const { cep, city, cnpj, name, state, number, street, country, complement, neighborhood } =
-        await request.validateUsing(storeCompanyValidation)
+      const {
+        cep,
+        city,
+        cnpj,
+        name,
+        state,
+        number,
+        street,
+        country,
+        complement,
+        neighborhood,
+        image,
+        attachments,
+      } = await request.validateUsing(storeCompanyValidation)
 
       const company = await this.companyService.store({
         neighborhood,
@@ -31,6 +47,15 @@ export default class CompaniesController {
         cep,
         userId: auth.user!.id,
       })
+
+      if (attachments) {
+        await this.attachmentService.store({
+          image,
+          type: attachments.type,
+          name: attachments.name,
+          companyId: company.id,
+        })
+      }
 
       return ReturnApi.success({
         response,
@@ -69,6 +94,8 @@ export default class CompaniesController {
         country,
         complement,
         neighborhood,
+        image,
+        attachments,
         params: { id },
       } = await request.validateUsing(editCompanyValidation)
 
@@ -86,6 +113,17 @@ export default class CompaniesController {
         name,
         userId: auth.user!.id,
       })
+
+      if (attachments) {
+        await this.attachmentService.update({
+          attachmentId: attachments.id,
+          image,
+          type: attachments.type,
+          name: attachments.name,
+          companyId: id,
+        })
+      }
+
       return ReturnApi.success({
         response,
         message: 'Empresa atualizada com sucesso!',

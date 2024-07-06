@@ -10,22 +10,21 @@ test.group('User test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /users', async ({ client, assert }) => {
-    const type = await UserType.create({ name: 'operator' })
+    await UserType.create({ name: 'operator' })
 
     const body = {
-      email: 'johndoe@gmail.com',
-      password: '123',
-      name: 'john doe',
-      phone: '123123123',
-      typeId: type.id,
-      cep: '11111111',
-      country: 'Brasil',
-      state: 'SP',
-      city: 'Cruzero',
-      neighborhood: 'Centro',
-      street: 'Av. Jorge',
-      number: 904,
+      cep: '12701050',
+      city: 'Cruzeiro',
       complement: '',
+      country: 'Brasil',
+      email: 'johndoaae@gmail.com',
+      name: 'Vasco de la gama',
+      neighborhood: 'Centro',
+      number: '22',
+      password: '12312312312312',
+      phone: '12123123123',
+      state: 'SP',
+      street: 'Rua Engenheiro Antônio Penido',
     }
 
     const result = await client.post('/users').json(body)

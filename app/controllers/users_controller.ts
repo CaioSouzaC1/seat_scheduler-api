@@ -59,7 +59,6 @@ export default class UsersController {
           code: 400,
         })
       }
-
       return ReturnApi.error({
         response,
         message: 'Error ao criar o Usuário',
@@ -83,7 +82,6 @@ export default class UsersController {
         state,
         number,
         street,
-        typeId,
         country,
         complement,
         neighborhood,
@@ -100,7 +98,6 @@ export default class UsersController {
         state,
         number,
         street,
-        typeId,
         country,
         complement,
         neighborhood,

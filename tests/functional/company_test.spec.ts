@@ -1,9 +1,11 @@
 import Company from '#models/company'
+import CompanyAttachement from '#models/company_attachement'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeUser } from '#tests/utils/factories/make_user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { join, resolve } from 'node:path'
 
 test.group('Company test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
@@ -34,7 +36,11 @@ test.group('Company test', (group) => {
       complement: '',
     }
 
-    const result = await client.post('/companies').json(body).bearerToken(token)
+    const result = await client
+      .post('/companies')
+      .file('image', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
+      .fields(body)
+      .bearerToken(token)
 
     result.assertStatus(201)
 

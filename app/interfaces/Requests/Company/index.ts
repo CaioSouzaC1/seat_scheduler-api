@@ -1,3 +1,5 @@
+import { MultipartFile } from '@adonisjs/core/bodyparser'
+
 export interface IStoreCompanyRequest {
   name: string
   cnpj: string
@@ -31,4 +33,19 @@ export interface IEditCompanyRequest {
 export interface ICompanyId {
   companyId: string
   userId: string
+}
+
+export interface ICompanyAttachments {
+  companyId: string
+  type?: string
+  name?: string
+  image?: MultipartFile
+}
+
+export interface IUpdateCompanyAttachments {
+  attachmentId: string
+  companyId: string
+  type?: string
+  name?: string
+  image?: MultipartFile
 }

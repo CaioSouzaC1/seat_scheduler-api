@@ -6,7 +6,6 @@ import {
 } from '../interfaces/Requests/Company/index.js'
 import { AddressService } from './address_service.js'
 import Company from '#models/company'
-import { IEditUserRequest } from '../interfaces/Requests/User/index.js'
 
 @inject()
 export class CompanyService {
@@ -25,7 +24,7 @@ export class CompanyService {
     complement,
     neighborhood,
   }: IStoreCompanyRequest) {
-    const addressId = await this.addressService.store({
+    const address = await this.addressService.store({
       cep,
       city,
       state,
@@ -39,9 +38,10 @@ export class CompanyService {
     const company = await Company.create({
       name,
       cnpj,
-      addressId,
       userId,
     })
+
+    await company.related('address').associate(address)
 
     return company
   }
