@@ -12,6 +12,7 @@ import '../routes/user.routes.ts'
 import '../routes/user_type.routes.ts'
 import '../routes/session.routes.ts'
 import '../routes/company.routes.ts'
+import '../routes/store.routes.ts'
 
 router.get('/', async () => {
   return {
