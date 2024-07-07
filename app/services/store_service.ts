@@ -6,12 +6,11 @@ import {
 } from '../interfaces/Requests/Store/index.js'
 
 export class StoreService {
-  async store({ name, phone, companyId, addressId, description }: IStoreStoreRequest) {
+  async store({ name, phone, companyId, description }: IStoreStoreRequest) {
     return await Store.create({
       name,
       phone,
       companyId,
-      addressId,
       description,
     })
   }

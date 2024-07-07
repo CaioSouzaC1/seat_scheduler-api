@@ -1,3 +1,5 @@
+import { MultipartFile } from '@adonisjs/core/bodyparser'
+
 export interface IStoreStoreRequest {
   name: string
   phone: string
@@ -15,4 +17,10 @@ export interface IEditStoreRequest {
 
 export interface IStoreIdRequest {
   storeId: string
+}
+
+export interface IStoreStoreAttachementRequest {
+  name: string
+  type: string
+  imagePath: MultipartFile
 }

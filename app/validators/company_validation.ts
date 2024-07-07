@@ -21,7 +21,8 @@ export const storeCompanyValidation = vine.compile(
         size: '10mb',
         extnames: ['jpg', 'png', 'jpeg'],
       })
-      .optional(),
+      .optional()
+      .requiredIfExists('attachments'),
     attachments: vine
       .object({
         type: vine.string(),
@@ -50,7 +51,8 @@ export const editCompanyValidation = vine.compile(
         size: '10mb',
         extnames: ['jpg', 'png', 'jpeg'],
       })
-      .optional(),
+      .optional()
+      .requiredIfExists('attachments'),
     attachments: vine
       .object({
         id: vine

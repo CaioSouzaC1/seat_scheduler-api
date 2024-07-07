@@ -8,4 +8,3 @@ app.ready(() => {
     console.log(socket.id)
   })
 })
-

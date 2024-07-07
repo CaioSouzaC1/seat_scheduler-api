@@ -1,27 +1,27 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
-import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import UserType from './user_type.js'
+import Store from './store.js'
 
-export default class UserHasType extends BaseModel {
+export default class StoreAttachement extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
-  @column({ columnName: 'user_id' })
-  declare userId: string
+  @column()
+  declare name: string
 
-  @column({ columnName: 'type_id' })
-  declare typeId: string
+  @column()
+  declare type: string
 
-  @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
+  @column({ columnName: 'image_path' })
+  declare imagePath: string
 
-  @belongsTo(() => UserType, {
-    foreignKey: 'typeId',
-  })
-  declare type: BelongsTo<typeof UserType>
+  @column({ columnName: 'store_id' })
+  declare storeId: string
+
+  @belongsTo(() => Store)
+  declare attach: BelongsTo<typeof Store>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -30,7 +30,7 @@ export default class UserHasType extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  static async createUuid(model: UserHasType) {
+  static createUuid(model: StoreAttachement) {
     model.id = randomUUID()
   }
 }

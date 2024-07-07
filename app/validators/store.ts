@@ -17,6 +17,19 @@ export const storeStoreValidation = vine.compile(
       .string()
       .optional()
       .transform((value) => (value ? value : null)),
+    imagePath: vine
+      .file({
+        size: '10mb',
+        extnames: ['jpg', 'png', 'jpeg'],
+      })
+      .optional()
+      .requiredIfExists('attachments'),
+    attachments: vine
+      .object({
+        type: vine.string(),
+        name: vine.string(),
+      })
+      .optional(),
 
     companyId: vine
       .string()
@@ -45,6 +58,20 @@ export const editStoreValidation = vine.compile(
       .string()
       .optional()
       .transform((value) => (value ? value : null)),
+
+    imagePath: vine
+      .file({
+        size: '10mb',
+        extnames: ['jpg', 'png', 'jpeg'],
+      })
+      .optional()
+      .requiredIfExists('attachments'),
+    attachments: vine
+      .object({
+        type: vine.string(),
+        name: vine.string(),
+      })
+      .optional(),
 
     companyId: vine
       .string()

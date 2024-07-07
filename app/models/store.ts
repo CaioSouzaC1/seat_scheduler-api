@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, beforeFind, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, beforeFind, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import Company from './company.js'
+import StoreAttachement from './store_attachement.js'
 
 export default class Store extends BaseModel {
   @column({ isPrimary: true })
@@ -30,6 +31,9 @@ export default class Store extends BaseModel {
 
   @belongsTo(() => Company)
   declare company: BelongsTo<typeof Company>
+
+  @hasOne(() => StoreAttachement)
+  declare attach: HasOne<typeof StoreAttachement>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

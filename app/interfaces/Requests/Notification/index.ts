@@ -9,3 +9,8 @@ export interface IStoreNotificationRequest {
 export interface INotificationId {
   notificationId: string
 }
+
+export interface IEmitNotificationRequest {
+  userId: string
+  data: object
+}

@@ -134,4 +134,3 @@ test.group('Store test', (group) => {
     assert.isNull(storeOnDatabase)
   })
 })
-

@@ -14,6 +14,7 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import env from '#start/env'
 import Address from './address.js'
+import User from './user.js'
 
 export default class Company extends BaseModel {
   @column({ isPrimary: true })
@@ -30,6 +31,9 @@ export default class Company extends BaseModel {
 
   @belongsTo(() => Address)
   declare address: BelongsTo<typeof Address>
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
   @column()
   declare userId: string

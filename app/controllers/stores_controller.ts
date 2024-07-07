@@ -5,11 +5,13 @@ import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
 import { AddressService } from '#services/address_service'
 import { inject } from '@adonisjs/core'
+import { StoreAttachementService } from '#services/store_attachement_service'
 
 @inject()
 export default class StoresController {
   constructor(
     private storeService: StoreService,
+    private storeAttachementService: StoreAttachementService,
     private addressService: AddressService
   ) {}
 
@@ -28,6 +30,8 @@ export default class StoresController {
         country,
         complement,
         neighborhood,
+        imagePath,
+        attachments,
       } = await request.validateUsing(storeStoreValidation)
 
       const address = await this.addressService.store({
@@ -48,7 +52,17 @@ export default class StoresController {
         companyId,
       })
 
+      if (attachments) {
+        await this.storeAttachementService.store(store, {
+          imagePath: imagePath!,
+          type: attachments.type,
+          name: attachments.name,
+        })
+      }
+
       await store.related('address').associate(address)
+
+      await store.related('attach').create({})
 
       return ReturnApi.success({
         response,
@@ -65,6 +79,7 @@ export default class StoresController {
           code: 400,
         })
       }
+      console.log(err)
       return ReturnApi.error({
         response,
         message: 'Error ao criar a loja',

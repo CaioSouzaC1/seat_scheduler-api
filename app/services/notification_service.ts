@@ -1,8 +1,10 @@
 import Notification from '#models/notification'
 import {
+  IEmitNotificationRequest,
   INotificationId,
   IStoreNotificationRequest,
 } from '../interfaces/Requests/Notification/index.js'
+import ws from './ws.js'
 
 export class NoificationService {
   async store({ data, type, title, userId, message }: IStoreNotificationRequest) {
@@ -17,5 +19,9 @@ export class NoificationService {
     notification.read = true
 
     await notification.save()
+  }
+
+  async sendMessagePrivate({ userId, data }: IEmitNotificationRequest) {
+    ws.io?.emit(`notify.${userId}`, data)
   }
 }
