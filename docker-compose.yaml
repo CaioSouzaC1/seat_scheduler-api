@@ -1,8 +1,9 @@
-version: '3.7'
+version: '3.9'
 
 services:
   postgres:
     image: postgres:16.3
+    container_name: postgres-seat-scheduler-api
     ports:
       - 5432:5432
     environment:
@@ -11,18 +12,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     networks:
       - system
-
-  # node:
-  #   build:
-  #     context: .
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - 3000:3333
-  #   volumes:
-  #     - ./:/app
-  #   networks:
-  #     - system
 
 networks:
   system:
