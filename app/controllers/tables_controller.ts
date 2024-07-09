@@ -3,7 +3,12 @@ import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
 import { inject } from '@adonisjs/core'
 import { TableService } from '#services/table_service'
-import { editTableValidation, storeTableValidation } from '#validators/table_validation'
+import {
+  editTableValidation,
+  idParamTableValidation,
+  idTableValidation,
+  storeTableValidation,
+} from '#validators/table_validation'
 
 @inject()
 export default class TablesController {
@@ -47,15 +52,20 @@ export default class TablesController {
 
   async edit({ request, response }: HttpContext) {
     try {
-      const { status, observation, numberOfChairs, number, tableId } =
-        await request.validateUsing(editTableValidation)
+      const {
+        status,
+        observation,
+        numberOfChairs,
+        number,
+        params: { id },
+      } = await request.validateUsing(editTableValidation)
 
       await this.tableService.edit({
         status,
         observation,
         numberOfChairs,
         number,
-        tableId,
+        tableId: id,
       })
 
       return ReturnApi.success({
@@ -78,5 +88,97 @@ export default class TablesController {
       })
     }
   }
-}
 
+  async show({ request, response }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idTableValidation)
+
+      const table = await this.tableService.show({
+        tableId: id,
+      })
+
+      return ReturnApi.success({
+        response,
+        data: table,
+        message: 'Mesa encontrada com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao encontrar a mesa',
+        code: 400,
+      })
+    }
+  }
+
+  async delete({ request, response }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idTableValidation)
+
+      await this.tableService.delete({
+        tableId: id,
+      })
+
+      return ReturnApi.success({
+        response,
+        message: 'Mesa apagada com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao apagadar a mesa',
+        code: 400,
+      })
+    }
+  }
+
+  async index({ response, request }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idParamTableValidation)
+
+      const tables = await this.tableService.index(id)
+
+      return ReturnApi.success({
+        response,
+        data: tables,
+        message: 'Lista das mesas!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao listar a mesas',
+        code: 400,
+      })
+    }
+  }
+}

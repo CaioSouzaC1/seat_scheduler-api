@@ -153,7 +153,7 @@ test.group('Company test', (group) => {
 
     const address = await makeAddress()
 
-    const company = await makeCompany({
+    await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,

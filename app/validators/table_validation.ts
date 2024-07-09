@@ -22,24 +22,42 @@ export const editTableValidation = vine.compile(
     numberOfChairs: vine.number().optional(),
     status: vine.string().optional(),
     observation: vine.string().optional(),
-    tableId: vine
-      .string()
-      .uuid()
-      .exists(async (db, value) => {
-        const table = await db.from('tables').where('id', value).first()
-        return table ? true : false
-      }),
+    params: vine.object({
+      id: vine
+        .string()
+        .uuid()
+        .exists(async (db, value) => {
+          const table = await db.from('tables').where('id', value).first()
+          return table ? true : false
+        }),
+    }),
   })
 )
 
 export const idTableValidation = vine.compile(
   vine.object({
-    tableId: vine
-      .string()
-      .uuid()
-      .exists(async (db, value) => {
-        const table = await db.from('tables').where('id', value).first()
-        return table ? true : false
-      }),
+    params: vine.object({
+      id: vine
+        .string()
+        .uuid()
+        .exists(async (db, value) => {
+          const table = await db.from('tables').where('id', value).first()
+          return table ? true : false
+        }),
+    }),
+  })
+)
+
+export const idParamTableValidation = vine.compile(
+  vine.object({
+    params: vine.object({
+      id: vine
+        .string()
+        .uuid()
+        .exists(async (db, value) => {
+          const store = await db.from('stores').where('id', value).first()
+          return store ? true : false
+        }),
+    }),
   })
 )

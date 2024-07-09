@@ -3,6 +3,7 @@ import {
   afterFind,
   BaseModel,
   beforeCreate,
+  beforeFetch,
   beforeFind,
   belongsTo,
   column,
@@ -56,6 +57,12 @@ export default class Company extends BaseModel {
 
   @beforeFind()
   static bringRelation(query: ModelQueryBuilderContract<typeof Company>) {
+    query.preload('attachement')
+    query.preload('address')
+  }
+
+  @beforeFetch()
+  static bringRelationMany(query: ModelQueryBuilderContract<typeof Company>) {
     query.preload('attachement')
     query.preload('address')
   }

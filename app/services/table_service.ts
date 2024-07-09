@@ -28,7 +28,17 @@ export class TableService {
   }
 
   async delete({ tableId }: ITableIdRequest) {
-    return
+    const table = await Table.find(tableId)
+
+    await table?.delete()
+  }
+
+  async index(id: string) {
+    const tables = await Table.findManyBy({ storeId: id })
+
+    const tablesJson = tables.map((table) => table.serialize())
+
+    return tablesJson
   }
 }
 
