@@ -15,7 +15,33 @@ export default class CompaniesController {
   constructor(
     private companyService: CompanyService,
     private attachmentService: CompanyattachementService
-  ) { }
+  ) {}
+
+  async index({ response, auth }: HttpContext) {
+    try {
+      const companies = await this.companyService.index(auth.user!.id)
+
+      return ReturnApi.success({
+        response,
+        data: companies,
+        message: 'Lista das empresas!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao listar a empresa',
+        code: 400,
+      })
+    }
+  }
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -185,7 +211,7 @@ export default class CompaniesController {
       return ReturnApi.success({
         response,
         data: company,
-        message: 'Empresa econtrada com sucesso!',
+        message: 'Empresa encontrada com sucesso!',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {

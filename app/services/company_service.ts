@@ -9,7 +9,7 @@ import Company from '#models/company'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) { }
+  constructor(private addressService: AddressService) {}
 
   async store({
     cep,
@@ -93,5 +93,13 @@ export class CompanyService {
     const company = await Company.findBy({ id: companyId, user_id: userId })
 
     return company
+  }
+
+  async index(id: string) {
+    const companies = await Company.findManyBy({ user_id: id })
+
+    const companiesJson = companies.map((company) => company.serialize())
+
+    return companiesJson
   }
 }

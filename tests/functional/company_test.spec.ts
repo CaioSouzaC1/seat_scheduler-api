@@ -144,4 +144,38 @@ test.group('Company test', (group) => {
       },
     })
   })
+
+  test('[GET] /companies', async ({ client }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    const company = await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const result = await client.get('/companies').bearerToken(token)
+
+    result.assertStatus(200)
+
+    result.assertBodyContains({
+      data: [
+        {
+          id: String,
+        },
+      ],
+    })
+  })
 })
