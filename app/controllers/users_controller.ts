@@ -1,5 +1,5 @@
 import { UserService } from '#services/user_service'
-import { storeUserValidation, updateUserValidation } from '#validators/user_validation'
+import { storeUserValidation, updateUserValidation } from '#validators/user'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'

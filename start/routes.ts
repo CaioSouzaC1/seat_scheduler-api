@@ -15,6 +15,7 @@ import '../routes/session.routes.ts'
 import '../routes/company.routes.ts'
 import '../routes/store.routes.ts'
 import '../routes/table.routes.ts'
+import '../routes/booking.routes.ts'
 
 router.get('/', async () => {
   return {

@@ -8,11 +8,11 @@ import {
   idParamTableValidation,
   idTableValidation,
   storeTableValidation,
-} from '#validators/table_validation'
+} from '#validators/table'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) {}
+  constructor(private tableService: TableService) { }
 
   async store({ response, request }: HttpContext) {
     try {

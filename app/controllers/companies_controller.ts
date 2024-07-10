@@ -3,7 +3,7 @@ import {
   editCompanyValidation,
   storeCompanyValidation,
   idCompanyValidation,
-} from '#validators/company_validation'
+} from '#validators/company'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'
@@ -15,7 +15,7 @@ export default class CompaniesController {
   constructor(
     private companyService: CompanyService,
     private attachmentService: CompanyattachementService
-  ) {}
+  ) { }
 
   async index({ response, auth }: HttpContext) {
     try {
