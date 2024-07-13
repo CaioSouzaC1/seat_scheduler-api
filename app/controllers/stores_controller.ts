@@ -5,15 +5,13 @@ import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
 import { AddressService } from '#services/address_service'
 import { inject } from '@adonisjs/core'
-import { StoreAttachementService } from '#services/store_attachement_service'
 
 @inject()
 export default class StoresController {
   constructor(
     private storeService: StoreService,
-    private storeAttachementService: StoreAttachementService,
     private addressService: AddressService
-  ) { }
+  ) {}
 
   async store({ request, response }: HttpContext) {
     try {
@@ -152,7 +150,7 @@ export default class StoresController {
     } catch {
       return ReturnApi.error({
         response,
-        message: 'Error ao atualizar o loja',
+        message: 'Error ao deletar o loja',
         code: 400,
       })
     }
@@ -171,6 +169,28 @@ export default class StoresController {
       return ReturnApi.error({
         response,
         message: 'Error ao listar as lojas',
+        code: 400,
+      })
+    }
+  }
+
+  async show({ request, response }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idStoreValidation)
+
+      const store = await this.storeService.show({ storeId: id })
+
+      return ReturnApi.success({
+        response,
+        data: store,
+        message: 'Loja encontrada com sucesso!',
+      })
+    } catch {
+      return ReturnApi.error({
+        response,
+        message: 'Error ao encontrar o loja',
         code: 400,
       })
     }
