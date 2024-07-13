@@ -1,5 +1,6 @@
 import Booking from '#models/booking'
 import { makeAddress } from '#tests/utils/factories/make_address'
+import { makeBooking } from '#tests/utils/factories/make_booking'
 import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeStore } from '#tests/utils/factories/make_store'
 import { makeTable } from '#tests/utils/factories/make_table'
@@ -25,6 +26,7 @@ test.group('Booking test', (group) => {
     })
 
     const table = await makeTable()
+
     await makeStore()
 
     const login = await client.post('/login').json({
@@ -48,4 +50,124 @@ test.group('Booking test', (group) => {
 
     assert.isOk(bookingOnDatabase)
   })
+
+  test('[PUT] /bookings', async ({ client, assert }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    await makeTable()
+
+    await makeStore()
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const booking = await makeBooking({ reservedDate: '01/01/0001' })
+
+    const body = { reservedDate: '02/02/2001' }
+
+    const result = await client.put(`/bookings/${booking.id}`).json(body).bearerToken(token)
+
+    result.assertStatus(200)
+
+    const bookingOnDatabase = await Booking.find(booking.id)
+
+    assert.equal(bookingOnDatabase?.reservedDate, '02/02/2001')
+  })
+
+  test('[DELETE] /bookings', async ({ client, assert }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    await makeTable()
+
+    await makeStore()
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const booking = await makeBooking({ reservedDate: '01/01/0001' })
+
+    const result = await client.delete(`/bookings/${booking.id}`).bearerToken(token)
+
+    result.assertStatus(200)
+
+    const bookingOnDatabase = await Booking.find(booking.id)
+
+    assert.isNull(bookingOnDatabase)
+  })
+
+  test('[GET] /bookings', async ({ client }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    await makeTable()
+
+    await makeStore({
+      userId: user.id,
+    })
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    await makeBooking({ reservedDate: '01/01/0001' })
+
+    const result = await client.get(`/bookings/`).bearerToken(token)
+
+    console.log(result.body())
+
+    //result.assertStatus(200);
+
+    //result.assertBodyContains({
+    //  data: {
+    //    data: [
+    //      {
+    //        id: String
+    //      }
+    //    ]
+    //  }
+    //})
+  }).skip()
 })

@@ -13,22 +13,14 @@ export const storeStoreValidation = vine.compile(
     neighborhood: vine.string(),
     street: vine.string(),
     number: vine.number(),
-    complement: vine
-      .string()
-      .optional()
-      .transform((value) => (value ? value : null)),
-    imagePath: vine
-      .file({
-        size: '10mb',
-        extnames: ['jpg', 'png', 'jpeg'],
-      })
-      .optional()
-      .requiredIfExists('attachments'),
-    attachments: vine
-      .object({
-        type: vine.string(),
-        name: vine.string(),
-      })
+    complement: vine.string().optional(),
+    images: vine
+      .array(
+        vine.file({
+          size: '10mb',
+          extnames: ['jpg', 'png', 'jpeg'],
+        })
+      )
       .optional(),
 
     companyId: vine

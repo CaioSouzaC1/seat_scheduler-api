@@ -5,6 +5,7 @@ export interface IStoreStoreRequest {
   phone: string
   description: string
   companyId: string
+  images?: MultipartFile[]
 }
 
 export interface IEditStoreRequest {
@@ -13,6 +14,7 @@ export interface IEditStoreRequest {
   name?: string
   phone?: string
   description?: string
+  images?: MultipartFile[]
 }
 
 export interface IStoreIdRequest {

@@ -1,4 +1,5 @@
 import Booking from '#models/booking'
+import User from '#models/user'
 import {
   IBookingId,
   IEditBookingRequest,
@@ -29,5 +30,17 @@ export class BookingService {
     const booking = await Booking.find(bookingId)
 
     await booking?.delete()
+  }
+
+  async index(user: User) {
+    const bookings = await Booking.query()
+      .preload('table', (tableQuery) => {
+        tableQuery.preload('store', (storeQuery) => {
+          storeQuery.where('user_id', user.store.id)
+        })
+      })
+      .paginate(1, 10)
+
+    return bookings.serialize()
   }
 }

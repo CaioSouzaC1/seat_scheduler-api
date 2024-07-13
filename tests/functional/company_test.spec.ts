@@ -38,15 +38,16 @@ test.group('Company test', (group) => {
 
     const result = await client
       .post('/companies')
-      .file('image', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
+      .file('images', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
+      .file('images', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
       .fields(body)
       .bearerToken(token)
 
     result.assertStatus(201)
 
-    const companyOnDatabase = await Company.first()
+    const companyOnDatabase = await CompanyAttachement.first()
 
-    assert.equal(companyOnDatabase!.name, 'company')
+    assert.ok(companyOnDatabase?.imagePath)
   })
 
   test('[PUT] /companies/:id', async ({ assert, client }) => {
@@ -72,15 +73,31 @@ test.group('Company test', (group) => {
 
     const body = {
       name: 'company update',
+      cnpj: '123123123jasdfaaaaaa',
+      cep: '22222222',
+      country: 'Brazil',
+      state: 'RJ',
+      city: 'Cruzero',
+      neighborhood: 'Centro',
+      street: 'Av. Jorge',
+      number: 91,
+      complement: '',
     }
 
-    const result = await client.put(`/companies/${company.id}`).json(body).bearerToken(token)
+    const result = await client
+      .put(`/companies/${company.id}`)
+      .file('images', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
+      .file('images', join(resolve(), '/tests/utils/', 'dog-marine.jpg'))
+      .fields(body)
+      .bearerToken(token)
 
     result.assertStatus(200)
 
     const companyOnDatabase = await Company.find(company.id)
+    const attachOnDatabase = await CompanyAttachement.findBy('company_id', company.id)
 
     assert.equal(companyOnDatabase!.name, 'company update')
+    assert.ok(attachOnDatabase?.imagePath)
   })
 
   test('[DELETE] /companies/:id', async ({ assert, client }) => {

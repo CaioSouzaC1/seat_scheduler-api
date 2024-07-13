@@ -6,10 +6,12 @@ import {
 } from '../interfaces/Requests/Company/index.js'
 import { AddressService } from './address_service.js'
 import Company from '#models/company'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) {}
+  constructor(private addressService: AddressService) { }
 
   async store({
     cep,
@@ -22,6 +24,7 @@ export class CompanyService {
     userId,
     country,
     complement,
+    images,
     neighborhood,
   }: IStoreCompanyRequest) {
     const address = await this.addressService.store({
@@ -41,6 +44,16 @@ export class CompanyService {
       userId,
     })
 
+    if (images) {
+      for (const image of images) {
+        await image.move(app.makePath('uploads/companies'), {
+          name: `${cuid()}.${image.extname}`,
+        })
+
+        await company.related('attachement').create({ imagePath: image.filePath })
+      }
+    }
+
     await company.related('address').associate(address)
 
     return company
@@ -59,6 +72,7 @@ export class CompanyService {
     state,
     city,
     cep,
+    images,
   }: IEditCompanyRequest) {
     const company = await Company.findBy({ user_id: userId, id: companyId })
 
@@ -76,6 +90,18 @@ export class CompanyService {
         complement,
         neighborhood,
       })
+
+    if (images) {
+      for (const image of images) {
+        await image.move(app.makePath('uploads/companies'), {
+          name: `${cuid()}.${image.extname}`,
+        })
+
+        await company
+          .related('attachement')
+          .updateOrCreate({ companyId: company.id }, { imagePath: image.filePath })
+      }
+    }
 
     company.name = name ?? company.name
     company.cnpj = cnpj ?? company.cnpj

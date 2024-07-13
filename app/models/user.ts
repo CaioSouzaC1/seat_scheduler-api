@@ -1,14 +1,15 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, beforeFind, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, beforeFind, belongsTo, column, hasOne, manyToMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { randomUUID } from 'node:crypto'
 import Company from './company.js'
-import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
+import Store from './store.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -42,6 +43,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @belongsTo(() => Address)
   declare address: BelongsTo<typeof Address>
+
+  @manyToMany(() => Store)
+  declare store: ManyToMany<typeof Store>
 
   @hasOne(() => Company)
   declare company: HasOne<typeof Company>

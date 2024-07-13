@@ -6,15 +6,7 @@ export default class CompanyAttachement extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
-  @column()
-  declare name: string
-
-  @column()
-  declare type: string
-
-  @column({
-    columnName: 'image_path',
-  })
+  @column({ columnName: 'image_path' })
   declare imagePath: string
 
   @column({ columnName: 'company_id' })

@@ -1,28 +1,54 @@
 import Store from '#models/store'
+import { cuid } from '@adonisjs/core/helpers'
 import {
   IEditStoreRequest,
   IStoreIdRequest,
   IStoreStoreRequest,
 } from '../interfaces/Requests/Store/index.js'
+import app from '@adonisjs/core/services/app'
 
 export class StoreService {
-  async store({ name, phone, companyId, description }: IStoreStoreRequest) {
-    return await Store.create({
+  async store({ name, phone, companyId, description, images }: IStoreStoreRequest) {
+    const store = await Store.create({
       name,
       phone,
       companyId,
       description,
     })
+
+    if (images) {
+      for (const image of images) {
+        await image.move(app.makePath('uploads/stores'), {
+          name: `${cuid()}.${image.extname}`,
+        })
+
+        await store.related('attachement').create({ imagePath: image.filePath })
+      }
+    }
+
+    return store
   }
 
-  async update({ name, phone, description, storeId }: IEditStoreRequest) {
-    const store = await Store.find(storeId)
+  async update({ name, phone, description, storeId, images, companyId }: IEditStoreRequest) {
+    const store = await Store.findBy({ id: storeId, companyId })
 
     if (!store) return null
 
     store.name = name ?? store.name
     store.phone = phone ?? store.phone
     store.description = description ?? store.description
+
+    if (images) {
+      for (const image of images) {
+        await image.move(app.makePath('uploads/stores'), {
+          name: `${cuid()}.${image.extname}`,
+        })
+
+        await store
+          .related('attachement')
+          .updateOrCreate({ id: store.id }, { imagePath: image.filePath })
+      }
+    }
 
     await store?.save()
 

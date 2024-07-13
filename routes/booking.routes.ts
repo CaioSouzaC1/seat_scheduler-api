@@ -8,6 +8,7 @@ router
     router.put('/:id', [BookingsController, 'edit'])
     router.delete('/:id', [BookingsController, 'delete'])
     router.post('/', [BookingsController, 'store'])
+    router.get('/', [BookingsController, 'index'])
   })
   .prefix('bookings')
   .middleware(middleware.auth())

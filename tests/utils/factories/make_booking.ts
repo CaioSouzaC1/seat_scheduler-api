@@ -1,7 +1,7 @@
 import Booking from '#models/booking'
 import { faker } from '@faker-js/faker'
 
-export async function makeUser(override: Partial<Booking> = {}) {
+export async function makeBooking(override: Partial<Booking> = {}) {
   const booking = {
     status: faker.helpers.arrayElement(['pending', 'accepted']),
     observation: faker.lorem.lines(1),

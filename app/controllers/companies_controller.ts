@@ -56,11 +56,11 @@ export default class CompaniesController {
         country,
         complement,
         neighborhood,
-        image,
-        attachments,
+        images,
       } = await request.validateUsing(storeCompanyValidation)
 
       const company = await this.companyService.store({
+        images,
         neighborhood,
         complement,
         country,
@@ -73,15 +73,6 @@ export default class CompaniesController {
         cep,
         userId: auth.user!.id,
       })
-
-      if (attachments) {
-        await this.attachmentService.store({
-          image,
-          type: attachments.type,
-          name: attachments.name,
-          companyId: company.id,
-        })
-      }
 
       return ReturnApi.success({
         response,
@@ -120,12 +111,12 @@ export default class CompaniesController {
         country,
         complement,
         neighborhood,
-        image,
-        attachments,
+        images,
         params: { id },
       } = await request.validateUsing(editCompanyValidation)
 
       await this.companyService.update({
+        images,
         neighborhood,
         complement,
         country,
@@ -139,16 +130,6 @@ export default class CompaniesController {
         name,
         userId: auth.user!.id,
       })
-
-      if (attachments) {
-        await this.attachmentService.update({
-          attachmentId: attachments.id,
-          image,
-          type: attachments.type,
-          name: attachments.name,
-          companyId: id,
-        })
-      }
 
       return ReturnApi.success({
         response,

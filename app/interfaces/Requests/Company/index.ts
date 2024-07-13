@@ -11,6 +11,7 @@ export interface IStoreCompanyRequest {
   street: string
   number: number
   complement: string | null
+  images?: MultipartFile[]
 
   userId: string
 }
@@ -28,24 +29,10 @@ export interface IEditCompanyRequest {
   street?: string
   number?: number
   complement?: string | null
+  images?: MultipartFile[]
 }
 
 export interface ICompanyId {
   companyId: string
   userId: string
-}
-
-export interface ICompanyAttachments {
-  companyId: string
-  type?: string
-  name?: string
-  image?: MultipartFile
-}
-
-export interface IUpdateCompanyAttachments {
-  attachmentId: string
-  companyId: string
-  type?: string
-  name?: string
-  image?: MultipartFile
 }
