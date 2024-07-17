@@ -2,6 +2,7 @@ import User from '#models/user'
 import UserHasType from '#models/user_has_type'
 import UserType from '#models/user_type'
 import { makeAddress } from '#tests/utils/factories/make_address'
+import { makeStore } from '#tests/utils/factories/make_store'
 import { makeUser } from '#tests/utils/factories/make_user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
@@ -11,6 +12,7 @@ test.group('User test', (group) => {
 
   test('[POST] /users', async ({ client, assert }) => {
     await UserType.create({ name: 'operator' })
+    const store = await makeStore()
 
     const body = {
       cep: '12701050',
@@ -25,6 +27,7 @@ test.group('User test', (group) => {
       phone: '12123123123',
       state: 'SP',
       street: 'Rua Engenheiro Antônio Penido',
+      storeId: store.id,
     }
 
     const result = await client.post('/users').json(body)

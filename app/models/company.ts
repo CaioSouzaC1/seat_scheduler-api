@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import {
+  afterFetch,
   afterFind,
   BaseModel,
   beforeCreate,
@@ -13,9 +14,9 @@ import { randomUUID } from 'node:crypto'
 import CompanyAttachement from './company_attachement.js'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
-import env from '#start/env'
 import Address from './address.js'
 import User from './user.js'
+import env from '#start/env'
 
 export default class Company extends BaseModel {
   @column({ isPrimary: true })
@@ -65,12 +66,5 @@ export default class Company extends BaseModel {
   static bringRelationMany(query: ModelQueryBuilderContract<typeof Company>) {
     query.preload('attachement')
     query.preload('address')
-  }
-
-  @afterFind()
-  static changeURL(company: Company) {
-    company.attachement.map((attachement) => {
-      attachement.imagePath = env.get('HOST') + ':' + env.get('PORT') + attachement.imagePath
-    })
   }
 }

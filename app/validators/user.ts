@@ -14,10 +14,17 @@ export const storeUserValidation = vine.compile(
     neighborhood: vine.string(),
     street: vine.string(),
     number: vine.number(),
-    complement: vine
+    complement: vine.string().optional(),
+
+    type: vine.string().optional(),
+
+    storeId: vine
       .string()
-      .optional()
-      .transform((value) => (value ? value : null)),
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      })
+      .optional(),
   })
 )
 
@@ -35,9 +42,16 @@ export const updateUserValidation = vine.compile(
     neighborhood: vine.string().optional(),
     street: vine.string().optional(),
     number: vine.number().optional(),
-    complement: vine
+    complement: vine.string().optional(),
+
+    type: vine.string().optional(),
+
+    storeId: vine
       .string()
-      .optional()
-      .transform((value) => (value ? value : null)),
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      })
+      .optional(),
   })
 )

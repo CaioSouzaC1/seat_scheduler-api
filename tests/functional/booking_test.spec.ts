@@ -25,9 +25,9 @@ test.group('Booking test', (group) => {
       addressId: address.id,
     })
 
-    const table = await makeTable()
+    const store = await makeStore()
 
-    await makeStore()
+    const table = await makeTable({ storeId: store.id })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -40,6 +40,7 @@ test.group('Booking test', (group) => {
       observation: 'observation',
       reservedDate: '01/01/0001',
       tableId: table.id,
+      storeId: store.id,
     }
 
     const result = await client.post('/bookings').json(body).bearerToken(token)
@@ -141,9 +142,7 @@ test.group('Booking test', (group) => {
 
     await makeTable()
 
-    await makeStore({
-      userId: user.id,
-    })
+    await makeStore()
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -154,20 +153,54 @@ test.group('Booking test', (group) => {
 
     await makeBooking({ reservedDate: '01/01/0001' })
 
-    const result = await client.get(`/bookings/`).bearerToken(token)
+    const result = await client.get(`/bookings`).bearerToken(token)
 
-    console.log(result.body())
+    result.assertStatus(200)
 
-    //result.assertStatus(200);
+    result.assertBodyContains({
+      data: [
+        {
+          id: String,
+        },
+      ],
+    })
+  })
 
-    //result.assertBodyContains({
-    //  data: {
-    //    data: [
-    //      {
-    //        id: String
-    //      }
-    //    ]
-    //  }
-    //})
-  }).skip()
+  test('[GET] /bookins/:id', async ({ client }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    await makeTable()
+
+    await makeStore()
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const booking = await makeBooking({ reservedDate: '01/01/0001' })
+
+    const result = await client.get(`/bookings/${booking.id}`).bearerToken(token)
+
+    result.assertStatus(200)
+
+    result.assertBodyContains({
+      data: {
+        id: String,
+      },
+    })
+  })
 })

@@ -4,6 +4,13 @@ export const storeBookingValidation = vine.compile(
   vine.object({
     observation: vine.string().optional(),
     reservedDate: vine.string(),
+    storeId: vine
+      .string()
+      .uuid()
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      }),
     tableId: vine
       .string()
       .uuid()

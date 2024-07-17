@@ -27,21 +27,27 @@ export default class UsersController {
         country,
         complement,
         neighborhood,
+        type,
+        storeId,
       } = await request.validateUsing(storeUserValidation)
 
       const user = await this.userService.store({
+        storeId,
+        type,
         email,
         name,
         phone,
         password,
-        cep,
-        city,
-        state,
-        number,
-        street,
-        country,
-        neighborhood,
-        complement,
+        address: {
+          cep,
+          city,
+          state,
+          number,
+          street,
+          country,
+          neighborhood,
+          complement,
+        },
       })
 
       return ReturnApi.success({
@@ -85,22 +91,31 @@ export default class UsersController {
         country,
         complement,
         neighborhood,
+        type,
+        storeId,
       } = await request.validateUsing(updateUserValidation)
 
+      const user = auth.user
+
       await this.userService.update({
-        userId: auth.user!.id,
+        userId: user!.id,
         password,
-        cep,
-        city,
         name,
         email,
         phone,
-        state,
-        number,
-        street,
-        country,
-        complement,
-        neighborhood,
+        type,
+        storeId,
+        address: {
+          addressId: user!.address.id,
+          cep,
+          city,
+          state,
+          number,
+          street,
+          country,
+          complement,
+          neighborhood,
+        },
       })
 
       return ReturnApi.success({

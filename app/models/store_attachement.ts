@@ -3,6 +3,7 @@ import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Store from './store.js'
+import env from '#start/env'
 
 export default class StoreAttachement extends BaseModel {
   @column({ isPrimary: true })
@@ -14,7 +15,12 @@ export default class StoreAttachement extends BaseModel {
   @column()
   declare type: string
 
-  @column({ columnName: 'image_path' })
+  @column({
+    columnName: 'image_path',
+    serialize: (value: string) => {
+      return env.get('HOST') + ':' + env.get('PORT') + value
+    },
+  })
   declare imagePath: string
 
   @column({ columnName: 'store_id' })

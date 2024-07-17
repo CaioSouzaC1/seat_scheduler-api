@@ -1,6 +1,6 @@
 import { inject } from '@adonisjs/core'
 import {
-  ICompanyId,
+  ICompanyIdRequest,
   IEditCompanyRequest,
   IStoreCompanyRequest,
 } from '../interfaces/Requests/Company/index.js'
@@ -109,13 +109,13 @@ export class CompanyService {
     await company.save()
   }
 
-  async delete({ companyId, userId }: ICompanyId) {
+  async delete({ companyId, userId }: ICompanyIdRequest) {
     const company = await Company.findBy({ id: companyId, user_id: userId })
 
     await company!.delete()
   }
 
-  async show({ companyId, userId }: ICompanyId) {
+  async show({ companyId, userId }: ICompanyIdRequest) {
     const company = await Company.findBy({ id: companyId, user_id: userId })
 
     return company

@@ -1,6 +1,5 @@
 import User from '#models/user'
 import { inject } from '@adonisjs/core'
-import { UserHasTypeService } from './user_has_type_service.js'
 import { DateTime, Settings } from 'luxon'
 import {
   IFindByEmailUserRequest,
@@ -13,34 +12,26 @@ import UserType from '#models/user_type'
 
 @inject()
 export class UserService {
-  constructor(
-    private userHasTypeService: UserHasTypeService,
-    private addressService: AddressService
-  ) { }
+  constructor(private addressService: AddressService) {}
 
   async store({
     name,
     password,
     phone,
     email,
-    neighborhood,
-    complement,
-    country,
-    street,
-    number,
-    state,
-    city,
-    cep,
+    address: { cep, city, state, number, street, country, complement, neighborhood },
+    type,
+    storeId,
   }: IStoreUserRequest): Promise<User> {
     const address = await this.addressService.store({
-      neighborhood,
-      complement,
-      country,
-      street,
-      number,
-      state,
-      city,
       cep,
+      city,
+      state,
+      number,
+      street,
+      country,
+      complement,
+      neighborhood,
     })
 
     const user = await User.create({
@@ -52,9 +43,13 @@ export class UserService {
 
     await user.related('address').associate(address)
 
-    const type = await UserType.findBy('name', 'operator')
+    type = type ? type : 'operator'
 
-    await this.userHasTypeService.store({ typeId: type!.id, userId: user.id })
+    const typeId = await UserType.findBy('name', type)
+
+    if (typeId) await user.related('type').attach([typeId.id])
+
+    if (storeId) await user.related('store').attach([storeId])
 
     return user
   }
@@ -65,14 +60,7 @@ export class UserService {
     name,
     password,
     phone,
-    cep,
-    city,
-    state,
-    number,
-    street,
-    country,
-    complement,
-    neighborhood,
+    address: { cep, city, state, number, street, country, complement, neighborhood },
   }: IEditUserRequest) {
     const user = await User.find(userId)
 
@@ -119,10 +107,6 @@ export class UserService {
   async findById({ userId }: IUserIdRequest): Promise<User | null> {
     const user = await User.find(userId)
 
-    if (!user) {
-      return null
-    }
-
     return user
   }
 
@@ -137,7 +121,7 @@ export class UserService {
 
     userOnDatabase!.loginCount++
 
-    await userOnDatabase!.save()
+    await userOnDatabase?.save()
   }
 
   async lastLogin(user: User) {
@@ -147,7 +131,7 @@ export class UserService {
 
     userOnDatabase!.lastLogin = DateTime.now().setLocale('pt-BR').toLocaleString()
 
-    await userOnDatabase!.save()
+    await userOnDatabase?.save()
 
     return userOnDatabase
   }

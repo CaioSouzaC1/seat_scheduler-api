@@ -5,22 +5,14 @@ import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import UserType from './user_type.js'
 
-export default class UserHasType extends BaseModel {
+export default class StoreUser extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
-
-  @column({ columnName: 'user_id' })
-  declare userId: string
-
-  @column({ columnName: 'type_id' })
-  declare typeId: string
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @belongsTo(() => UserType, {
-    foreignKey: 'typeId',
-  })
+  @belongsTo(() => UserType)
   declare type: BelongsTo<typeof UserType>
 
   @column.dateTime({ autoCreate: true })
@@ -28,4 +20,10 @@ export default class UserHasType extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeCreate()
+  static async createUuid(model: StoreUser) {
+    model.id = randomUUID()
+  }
 }
+

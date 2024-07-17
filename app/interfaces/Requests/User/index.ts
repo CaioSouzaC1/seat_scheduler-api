@@ -1,16 +1,14 @@
+import { IEditAddressRequest, IStoreAddressRequest } from '../Address/index.js'
+
 export interface IStoreUserRequest {
   email: string
   name: string
   phone: string
   password: string
-  cep: string
-  country: string
-  state: string
-  city: string
-  neighborhood: string
-  street: string
-  number: number
-  complement: string | null
+  type?: string
+  storeId?: string
+
+  address: IStoreAddressRequest
 }
 
 export interface IEditUserRequest {
@@ -19,14 +17,11 @@ export interface IEditUserRequest {
   name?: string
   phone?: string
   password?: string
-  cep?: string
-  country?: string
-  state?: string
-  city?: string
-  neighborhood?: string
-  street?: string
-  number?: number
-  complement?: string | null
+
+  type?: string
+  storeId?: string
+
+  address: IEditAddressRequest
 }
 
 export interface IUserIdRequest {

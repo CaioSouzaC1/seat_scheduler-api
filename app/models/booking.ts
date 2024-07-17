@@ -5,6 +5,7 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Table from './table.js'
 import { randomUUID } from 'node:crypto'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import Store from './store.js'
 
 export default class Booking extends BaseModel {
   @column({ isPrimary: true })
@@ -15,6 +16,9 @@ export default class Booking extends BaseModel {
 
   @column()
   declare observation: string
+
+  @column({ columnName: 'store_id' })
+  declare storeId: string
 
   @column({ columnName: 'reserved_date' })
   declare reservedDate: string
@@ -30,6 +34,9 @@ export default class Booking extends BaseModel {
 
   @belongsTo(() => Table)
   declare table: BelongsTo<typeof Table>
+
+  @belongsTo(() => Store)
+  declare store: BelongsTo<typeof Store>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

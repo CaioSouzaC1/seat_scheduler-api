@@ -1,19 +1,14 @@
 import { MultipartFile } from '@adonisjs/core/bodyparser'
+import { IEditAddressRequest, IStoreAddressRequest } from '../Address/index.js'
 
 export interface IStoreCompanyRequest {
   name: string
   cnpj: string
-  cep: string
-  country: string
-  state: string
-  city: string
-  neighborhood: string
-  street: string
-  number: number
-  complement: string | null
   images?: MultipartFile[]
 
   userId: string
+
+  address: IStoreAddressRequest
 }
 
 export interface IEditCompanyRequest {
@@ -21,18 +16,13 @@ export interface IEditCompanyRequest {
   userId: string
   name?: string
   cnpj?: string
-  cep?: string
-  country?: string
-  state?: string
-  city?: string
-  neighborhood?: string
-  street?: string
-  number?: number
-  complement?: string | null
+
   images?: MultipartFile[]
+
+  address: IEditAddressRequest
 }
 
-export interface ICompanyId {
+export interface ICompanyIdRequest {
   companyId: string
   userId: string
 }

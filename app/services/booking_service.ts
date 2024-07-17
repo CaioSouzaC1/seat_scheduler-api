@@ -1,14 +1,18 @@
 import Booking from '#models/booking'
+import Table from '#models/table'
 import User from '#models/user'
 import {
   IBookingId,
   IEditBookingRequest,
   IStoreBookingRequest,
 } from '../interfaces/Requests/Booking/index.js'
+import ws from './ws.js'
 
 export class BookingService {
-  async store({ tableId, observation, reservedDate }: IStoreBookingRequest) {
-    await Booking.create({ tableId, observation, reservedDate })
+  async store({ tableId, observation, reservedDate, storeId }: IStoreBookingRequest) {
+    await Booking.create({ tableId, observation, reservedDate, storeId })
+
+    ws.io?.emit(`notify.${storeId}`, { message: `Reservation for ${reservedDate}` })
   }
 
   async update({ observation, reservedDate, bookingId }: IEditBookingRequest) {
@@ -33,14 +37,16 @@ export class BookingService {
   }
 
   async index(user: User) {
-    const bookings = await Booking.query()
-      .preload('table', (tableQuery) => {
-        tableQuery.preload('store', (storeQuery) => {
-          storeQuery.where('user_id', user.store.id)
+    const bookies = await Booking.query().preload('table', (tableQuery) => {
+      tableQuery.preload('store', (storeQuery) => {
+        storeQuery.preload('user', (userQuery) => {
+          userQuery.where('id', user.id)
         })
       })
-      .paginate(1, 10)
+    })
 
-    return bookings.serialize()
+    const bookiesJson = bookies.map((book) => book.serialize())
+
+    return bookiesJson
   }
 }

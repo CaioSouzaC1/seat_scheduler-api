@@ -11,7 +11,7 @@ import { BookingService } from '#services/booking_service'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) { }
+  constructor(private bookingService: BookingService) {}
 
   async index({ response, auth }: HttpContext) {
     try {
@@ -22,23 +22,21 @@ export default class BookingsController {
         data: bookings,
         message: 'Lista de agendamentos',
       })
-    } catch (err){
-      console.error(err)
+    } catch (err) {
       return ReturnApi.error({
         response,
         message: 'Error no agendamento',
         code: 400,
       })
     }
-
   }
 
   async store({ request, response }: HttpContext) {
     try {
-      const { tableId, observation, reservedDate } =
+      const { tableId, observation, reservedDate, storeId } =
         await request.validateUsing(storeBookingValidation)
 
-      await this.bookingService.store({ tableId, observation, reservedDate })
+      await this.bookingService.store({ tableId, observation, reservedDate, storeId })
 
       return ReturnApi.success({
         response,

@@ -13,9 +13,7 @@ export default class UserType extends BaseModel {
 
   @manyToMany(() => User, {
     pivotTable: 'user_has_types',
-    localKey: 'id',
     pivotForeignKey: 'type_id',
-    relatedKey: 'id',
     pivotRelatedForeignKey: 'user_id',
   })
   declare user: ManyToMany<typeof User>
