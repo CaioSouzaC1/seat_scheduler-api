@@ -31,4 +31,3 @@ export default class MenuItem extends BaseModel {
     model.id = randomUUID()
   }
 }
-

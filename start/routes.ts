@@ -16,9 +16,11 @@ import '../routes/company.routes.ts'
 import '../routes/store.routes.ts'
 import '../routes/table.routes.ts'
 import '../routes/booking.routes.ts'
+import '../routes/order.routes.ts'
+
 import ws from '#services/ws'
 
 router.get('/:id', async ({ response, params }) => {
-  ws.io?.emit(`notify.${params.id}`, { message: "Hello, World" })
+  ws.io?.emit(`notify.${params.id}`, { message: 'Hello, World' })
   return response.send({ message: `send message to ${params.id}` })
 })
