@@ -17,6 +17,7 @@ import '../routes/store.routes.ts'
 import '../routes/table.routes.ts'
 import '../routes/booking.routes.ts'
 import '../routes/order.routes.ts'
+import '../routes/evaluation.routes.ts'
 
 import ws from '#services/ws'
 

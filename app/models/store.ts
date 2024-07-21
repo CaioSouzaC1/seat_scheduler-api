@@ -15,6 +15,7 @@ import type { BelongsTo, HasOne, ManyToMany } from '@adonisjs/lucid/types/relati
 import Company from './company.js'
 import StoreAttachement from './store_attachement.js'
 import User from './user.js'
+import Evaluation from './evaluation.js'
 
 export default class Store extends BaseModel {
   @column({ isPrimary: true })
@@ -46,6 +47,9 @@ export default class Store extends BaseModel {
 
   @hasOne(() => StoreAttachement)
   declare attachement: HasOne<typeof StoreAttachement>
+
+  @hasOne(() => Evaluation)
+  declare evaluation: HasOne<typeof Evaluation>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
