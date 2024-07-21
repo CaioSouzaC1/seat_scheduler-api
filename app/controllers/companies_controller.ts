@@ -8,14 +8,10 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
-import { CompanyattachementService } from '#services/company_attachement_service'
 
 @inject()
 export default class CompaniesController {
-  constructor(
-    private companyService: CompanyService,
-    private attachmentService: CompanyattachementService
-  ) { }
+  constructor(private companyService: CompanyService) {}
 
   async index({ response, auth }: HttpContext) {
     try {
@@ -61,16 +57,18 @@ export default class CompaniesController {
 
       const company = await this.companyService.store({
         images,
-        neighborhood,
-        complement,
-        country,
-        street,
-        number,
-        state,
+        address: {
+          complement,
+          neighborhood,
+          country,
+          street,
+          number,
+          state,
+          city,
+          cep,
+        },
         name,
         cnpj,
-        city,
-        cep,
         userId: auth.user!.id,
       })
 
@@ -117,14 +115,16 @@ export default class CompaniesController {
 
       await this.companyService.update({
         images,
-        neighborhood,
-        complement,
-        country,
-        street,
-        number,
-        state,
-        city,
-        cep,
+        address: {
+          neighborhood,
+          complement,
+          country,
+          street,
+          number,
+          state,
+          city,
+          cep,
+        },
         companyId: id,
         cnpj,
         name,

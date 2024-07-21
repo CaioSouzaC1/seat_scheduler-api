@@ -1,5 +1,4 @@
 import Advert from '#models/advert'
-import AdvertAttachement from '#models/advert_attachement'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import { makeAdvert } from '#tests/utils/factories/make_advert'
 import { makeCompany } from '#tests/utils/factories/make_company'
@@ -54,7 +53,7 @@ test.group('Advert test', (group) => {
     assert.isOk(advert)
   })
 
-  test('[SHOW] /adverts/:id', async ({ client, assert }) => {
+  test('[SHOW] /adverts/:id', async ({ client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -168,7 +167,7 @@ test.group('Advert test', (group) => {
     assert.equal(advertOnDatabase?.name, 'name update')
   })
 
-  test('[GET] /adverts/', async ({ client, assert }) => {
+  test('[GET] /adverts/', async ({ client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',

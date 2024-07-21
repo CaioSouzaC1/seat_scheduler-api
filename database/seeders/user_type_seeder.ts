@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto'
 
 export default class extends BaseSeeder {
   async run() {
-    const type = await UserType.create({
+    await UserType.create({
       id: randomUUID(),
       name: 'operator',
     })

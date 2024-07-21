@@ -41,4 +41,3 @@ export class TableService {
     return tablesJson
   }
 }
-

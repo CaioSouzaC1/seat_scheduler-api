@@ -12,10 +12,7 @@ export const storeCompanyValidation = vine.compile(
     neighborhood: vine.string(),
     street: vine.string(),
     number: vine.number(),
-    complement: vine
-      .string()
-      .optional()
-      .transform((value) => (value ? value : null)),
+    complement: vine.string().optional(),
     images: vine
       .array(
         vine.file({
@@ -39,7 +36,7 @@ export const editCompanyValidation = vine.compile(
     neighborhood: vine.string().optional(),
     street: vine.string().optional(),
     number: vine.number().optional(),
-    complement: vine.string().nullable().optional(),
+    complement: vine.string().optional(),
     images: vine
       .array(
         vine.file({

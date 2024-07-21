@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
 import env from '#start/env'
-import { Env } from '@adonisjs/core/env'
 
 export default class CompanyAttachement extends BaseModel {
   @column({ isPrimary: true })

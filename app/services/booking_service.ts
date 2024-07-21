@@ -1,5 +1,4 @@
 import Booking from '#models/booking'
-import Table from '#models/table'
 import User from '#models/user'
 import {
   IBookingId,

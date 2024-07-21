@@ -11,21 +11,14 @@ import { cuid } from '@adonisjs/core/helpers'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) { }
+  constructor(private addressService: AddressService) {}
 
   async store({
-    cep,
-    city,
     cnpj,
     name,
-    state,
-    number,
-    street,
-    userId,
-    country,
-    complement,
+    address: { cep, city, state, number, street, country, complement, neighborhood },
     images,
-    neighborhood,
+    userId,
   }: IStoreCompanyRequest) {
     const address = await this.addressService.store({
       cep,
@@ -64,14 +57,7 @@ export class CompanyService {
     name,
     cnpj,
     userId,
-    neighborhood,
-    complement,
-    country,
-    street,
-    number,
-    state,
-    city,
-    cep,
+    address: { neighborhood, complement, country, street, number, state, city, cep },
     images,
   }: IEditCompanyRequest) {
     const company = await Company.findBy({ user_id: userId, id: companyId })

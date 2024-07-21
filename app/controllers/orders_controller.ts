@@ -91,7 +91,7 @@ export default class OrdersController {
         params: { id },
       } = await request.validateUsing(orderIdValidator)
 
-      const order = await this.orderService.delete({ orderId: id })
+      await this.orderService.delete({ orderId: id })
 
       return ReturnApi.success({
         response,

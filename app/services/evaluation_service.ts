@@ -4,7 +4,6 @@ import {
   IStoreEvaluation,
   IUpdateEvaluation,
 } from '../interfaces/Requests/Evaluation/index.js'
-import Store from '#models/store'
 
 export class EvaluationService {
   async index() {

@@ -10,7 +10,7 @@ export interface IStoreAddressRequest {
 }
 
 export interface IEditAddressRequest {
-  addressId: string
+  addressId?: string
   cep?: string
   country?: string
   state?: string

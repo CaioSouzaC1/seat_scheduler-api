@@ -1,7 +1,5 @@
 import { DateTime } from 'luxon'
 import {
-  afterFetch,
-  afterFind,
   BaseModel,
   beforeCreate,
   beforeFetch,
@@ -16,7 +14,6 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
 import User from './user.js'
-import env from '#start/env'
 import Advert from './advert.js'
 
 export default class Company extends BaseModel {
