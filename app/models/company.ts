@@ -17,6 +17,7 @@ import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
 import User from './user.js'
 import env from '#start/env'
+import Advert from './advert.js'
 
 export default class Company extends BaseModel {
   @column({ isPrimary: true })
@@ -44,6 +45,9 @@ export default class Company extends BaseModel {
     foreignKey: 'companyId',
   })
   declare attachement: HasMany<typeof CompanyAttachement>
+
+  @hasMany(() => Advert)
+  declare advert: HasMany<typeof Advert>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
