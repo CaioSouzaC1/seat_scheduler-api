@@ -7,7 +7,7 @@ import { editAdvertValidation, idAdvertValidation, storeAdvertValidation } from 
 
 @inject()
 export default class AdvertsController {
-  constructor(private adverService: AdvertService) {}
+  constructor(private adverService: AdvertService) { }
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -29,7 +29,6 @@ export default class AdvertsController {
           code: 400,
         })
       }
-      console.error(err)
       return ReturnApi.error({
         response,
         message: 'Error ao criar o anúncio',
