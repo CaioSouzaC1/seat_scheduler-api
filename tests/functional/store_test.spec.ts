@@ -33,11 +33,9 @@ test.group('Store test', (group) => {
     result.assertStatus(200)
 
     result.assertBodyContains({
-      data: [
-        {
-          id: store.id,
-        },
-      ],
+      data: {
+        data: [{ id: store.id }],
+      },
     })
   })
 

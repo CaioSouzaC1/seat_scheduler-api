@@ -4,10 +4,13 @@ import {
   IStoreEvaluation,
   IUpdateEvaluation,
 } from '../interfaces/Requests/Evaluation/index.js'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class EvaluationService {
-  async index() {
-    return await Evaluation.all()
+  async index({ page, limit }: IIndexRequest) {
+    const evaluation = await Evaluation.query().paginate(page, limit)
+
+    return evaluation.toJSON()
   }
 
   async store({ storeId, userId, note, description }: IStoreEvaluation) {

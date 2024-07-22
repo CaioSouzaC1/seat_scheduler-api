@@ -8,10 +8,11 @@ import { AddressService } from './address_service.js'
 import Company from '#models/company'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) {}
+  constructor(private addressService: AddressService) { }
 
   async store({
     cnpj,
@@ -43,7 +44,9 @@ export class CompanyService {
           name: `${cuid()}.${image.extname}`,
         })
 
-        await company.related('attachement').create({ imagePath: image.filePath })
+        await company
+          .related('attachement')
+          .create({ imagePath: '/uploads/companies/' + image.fileName })
       }
     }
 
@@ -107,11 +110,13 @@ export class CompanyService {
     return company
   }
 
-  async index(id: string) {
-    const companies = await Company.findManyBy({ user_id: id })
+  async index({ page, limit, id: userId }: IIndexRequest) {
+    const companies = await Company.query()
+      .preload('user', (userQuery) => {
+        userQuery.where('id', userId!)
+      })
+      .paginate(page, limit)
 
-    const companiesJson = companies.map((company) => company.serialize())
-
-    return companiesJson
+    return companies.toJSON()
   }
 }

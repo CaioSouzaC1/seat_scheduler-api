@@ -10,7 +10,7 @@ export default class CompanyAttachement extends BaseModel {
   @column({
     columnName: 'image_path',
     serialize: (value: string) => {
-      return env.get('HOST') + ':' + env.get('PORT') + value
+      return 'http://' + env.get('HOST') + ':' + env.get('PORT') + value
     },
   })
   declare imagePath: string

@@ -1,10 +1,10 @@
 import Booking from '#models/booking'
-import User from '#models/user'
 import {
   IBookingId,
   IEditBookingRequest,
   IStoreBookingRequest,
 } from '../interfaces/Requests/Booking/index.js'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 import ws from './ws.js'
 
 export class BookingService {
@@ -35,17 +35,17 @@ export class BookingService {
     await booking?.delete()
   }
 
-  async index(user: User) {
-    const bookies = await Booking.query().preload('table', (tableQuery) => {
-      tableQuery.preload('store', (storeQuery) => {
-        storeQuery.preload('user', (userQuery) => {
-          userQuery.where('id', user.id)
+  async index({ page, limit, id: userId }: IIndexRequest) {
+    const bookies = await Booking.query()
+      .preload('table', (tableQuery) => {
+        tableQuery.preload('store', (storeQuery) => {
+          storeQuery.preload('user', (userQuery) => {
+            userQuery.where('id', userId!)
+          })
         })
       })
-    })
+      .paginate(page, limit)
 
-    const bookiesJson = bookies.map((book) => book.serialize())
-
-    return bookiesJson
+    return bookies.toJSON()
   }
 }

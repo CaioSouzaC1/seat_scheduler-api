@@ -4,6 +4,7 @@ import {
   IStoreTableRequest,
   ITableIdRequest,
 } from '../interfaces/Requests/Table/index.js'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class TableService {
   async store({ number, status, storeId, observation, numberOfChairs }: IStoreTableRequest) {
@@ -33,11 +34,13 @@ export class TableService {
     await table?.delete()
   }
 
-  async index(id: string) {
-    const tables = await Table.findManyBy({ storeId: id })
+  async index({ page, limit, id: storeId }: IIndexRequest) {
+    const tables = await Table.query()
+      .preload('store', (storeQuery) => {
+        storeQuery.where('id', storeId!)
+      })
+      .paginate(page, limit)
 
-    const tablesJson = tables.map((table) => table.serialize())
-
-    return tablesJson
+    return tables.toJSON()
   }
 }

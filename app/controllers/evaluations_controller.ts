@@ -8,10 +8,11 @@ import {
 } from '#validators/evaluation'
 import { inject } from '@adonisjs/core'
 import { errors } from '@vinejs/vine'
+import { indexValidation } from '#validators/index'
 
 @inject()
 export default class EvaluationsController {
-  constructor(private evaluationService: EvaluationService) { }
+  constructor(private evaluationService: EvaluationService) {}
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -134,9 +135,13 @@ export default class EvaluationsController {
     }
   }
 
-  async index({ response }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     try {
-      const evaluations = await this.evaluationService.index()
+      const {
+        params: { limit, page },
+      } = await request.validateUsing(indexValidation)
+
+      const evaluations = await this.evaluationService.index({ limit, page })
 
       return ReturnApi.success({
         response,

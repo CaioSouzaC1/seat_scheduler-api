@@ -88,11 +88,9 @@ test.group('Order test', (group) => {
     result.assertStatus(200)
 
     result.assertBodyContains({
-      data: [
-        {
-          id: String,
-        },
-      ],
+      data: {
+        data: [{ id: String }],
+      },
     })
   })
 

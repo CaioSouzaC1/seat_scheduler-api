@@ -9,10 +9,11 @@ import {
   idTableValidation,
   storeTableValidation,
 } from '#validators/table'
+import { indexValidation } from '#validators/index'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) { }
+  constructor(private tableService: TableService) {}
 
   async store({ response, request }: HttpContext) {
     try {
@@ -158,7 +159,11 @@ export default class TablesController {
         params: { id },
       } = await request.validateUsing(idParamTableValidation)
 
-      const tables = await this.tableService.index(id)
+      const {
+        params: { limit, page },
+      } = await request.validateUsing(indexValidation)
+
+      const tables = await this.tableService.index({ page, limit, id })
 
       return ReturnApi.success({
         response,

@@ -6,6 +6,7 @@ import {
   IStoreStoreRequest,
 } from '../interfaces/Requests/Store/index.js'
 import app from '@adonisjs/core/services/app'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class StoreService {
   async store({ name, phone, companyId, description, images }: IStoreStoreRequest) {
@@ -22,7 +23,9 @@ export class StoreService {
           name: `${cuid()}.${image.extname}`,
         })
 
-        await store.related('attachement').create({ imagePath: image.filePath })
+        await store
+          .related('attachement')
+          .create({ imagePath: '/uploads/companies/' + image.fileName })
       }
     }
 
@@ -65,11 +68,9 @@ export class StoreService {
     return await Store.find(storeId)
   }
 
-  async index() {
-    const stores = await Store.all()
+  async index({ page, limit }: IIndexRequest) {
+    const stores = await Store.query().paginate(page, limit)
 
-    const storeJson = stores.map((store) => store.serialize())
-
-    return storeJson
+    return stores.toJSON()
   }
 }

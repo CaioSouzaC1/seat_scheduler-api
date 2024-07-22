@@ -6,6 +6,7 @@ import {
   IUpdateAdvertRequest,
 } from '../interfaces/Requests/Advert/index.js'
 import { cuid } from '@adonisjs/core/helpers'
+import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class AdvertService {
   async store({ name, type, images, companyId }: IStoreAdvertRequest) {
@@ -16,7 +17,9 @@ export class AdvertService {
         name: `${cuid()}.${image.extname}`,
       })
 
-      await advert.related('attachements').create({ imagePath: image.filePath })
+      await advert
+        .related('attachements')
+        .create({ imagePath: '/uploads/companies/' + image.fileName })
     }
   }
 
@@ -51,7 +54,17 @@ export class AdvertService {
     await advert?.delete()
   }
 
-  async index() {
-    return await Advert.all()
+  async index({ page, limit, id: userId }: IIndexRequest) {
+    const advert = await Advert.query()
+      .preload('company', (companyQuery) => {
+        companyQuery.preload('user', (userQuery) => {
+          userQuery.preload('store', (storeQuery) => {
+            storeQuery.where('userId', userId!)
+          })
+        })
+      })
+      .paginate(page, limit)
+
+    return advert.toJSON()
   }
 }
