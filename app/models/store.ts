@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import {
   BaseModel,
   beforeCreate,
+  beforeFetch,
   beforeFind,
   belongsTo,
   column,
@@ -65,6 +66,12 @@ export default class Store extends BaseModel {
   @beforeFind()
   static bringRelation(query: ModelQueryBuilderContract<typeof Store>) {
     query.preload('address')
+    query.preload('company')
+  }
+
+  @beforeFetch()
+  static bringRelationMany(query: ModelQueryBuilderContract<typeof Store>) {
+    query.preload('attachement')
     query.preload('company')
   }
 }
