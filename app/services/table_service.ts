@@ -1,12 +1,25 @@
 import Table from '#models/table'
 import {
   IEditTableRequest,
+  IStoreInBulkTableRequest,
   IStoreTableRequest,
   ITableIdRequest,
 } from '../interfaces/Requests/Table/index.js'
 import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class TableService {
+  async storeInBulk({
+    numberOfTables,
+    numberOfChairs,
+    observation,
+    status,
+    storeId,
+  }: IStoreInBulkTableRequest) {
+    for (let i = 0; i < numberOfTables; i++) {
+      await Table.create({ number: i, status, storeId, observation, numberOfChairs })
+    }
+  }
+
   async store({ number, status, storeId, observation, numberOfChairs }: IStoreTableRequest) {
     return await Table.create({ number, status, storeId, observation, numberOfChairs })
   }

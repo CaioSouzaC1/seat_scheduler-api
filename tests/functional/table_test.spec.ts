@@ -10,6 +10,42 @@ import { test } from '@japa/runner'
 test.group('Table test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
+  test('[POST] /tables/bulk', async ({ client }) => {
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const address = await makeAddress()
+
+    await makeCompany({
+      name: 'company',
+      userId: user.id,
+      addressId: address.id,
+    })
+
+    const store = await makeStore()
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const body = {
+      numberOfTables: 1,
+      storeId: store.id,
+      numberOfChairs: 10,
+      observation: 'closed door',
+      status: 'avaliable',
+    }
+
+    const result = await client.post('/tables/bulk').json(body).bearerToken(token)
+
+    result.assertStatus(201)
+  })
+
   test('[POST] /tables', async ({ client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',

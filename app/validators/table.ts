@@ -1,5 +1,21 @@
 import vine from '@vinejs/vine'
 
+export const storeInBulkTableValidation = vine.compile(
+  vine.object({
+    numberOfTables: vine.number().min(1),
+    numberOfChairs: vine.number(),
+    status: vine.string(),
+    observation: vine.string(),
+    storeId: vine
+      .string()
+      .uuid()
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      }),
+  })
+)
+
 export const storeTableValidation = vine.compile(
   vine.object({
     number: vine.number(),

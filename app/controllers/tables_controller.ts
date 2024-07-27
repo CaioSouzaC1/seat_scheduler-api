@@ -7,6 +7,7 @@ import {
   editTableValidation,
   idParamTableValidation,
   idTableValidation,
+  storeInBulkTableValidation,
   storeTableValidation,
 } from '#validators/table'
 import { indexValidation } from '#validators/index'
@@ -14,6 +15,42 @@ import { indexValidation } from '#validators/index'
 @inject()
 export default class TablesController {
   constructor(private tableService: TableService) {}
+
+  async storeInBulk({ response, request }: HttpContext) {
+    try {
+      const { numberOfTables, storeId, numberOfChairs, observation, status } =
+        await request.validateUsing(storeInBulkTableValidation)
+
+      const table = await this.tableService.storeInBulk({
+        numberOfTables,
+        storeId,
+        numberOfChairs,
+        observation,
+        status,
+      })
+
+      return ReturnApi.success({
+        response,
+        data: table,
+        code: 201,
+        message: 'Mesas registradas com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao registrar a mesa',
+        code: 400,
+      })
+    }
+  }
 
   async store({ response, request }: HttpContext) {
     try {

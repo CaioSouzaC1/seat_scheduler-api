@@ -16,10 +16,10 @@ export default class extends BaseSeeder {
 
     const user = await User.create({
       id: randomUUID(),
-      email: 'johndoe@gmail.com',
+      email: 'johndoaaae@gmail.com',
       name: 'john doe',
       phone: '123123123',
-      password: '123',
+      password: '12312312312312',
       addressId: address.id,
     })
 
