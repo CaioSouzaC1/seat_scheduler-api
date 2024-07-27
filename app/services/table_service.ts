@@ -48,11 +48,7 @@ export class TableService {
   }
 
   async index({ page, limit, id: storeId }: IIndexRequest) {
-    const tables = await Table.query()
-      .preload('store', (storeQuery) => {
-        storeQuery.where('id', storeId!)
-      })
-      .paginate(page, limit)
+    const tables = await Table.query().where('storeId', storeId!).paginate(page, limit)
 
     return tables.toJSON()
   }
