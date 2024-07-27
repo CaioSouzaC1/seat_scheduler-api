@@ -8,17 +8,14 @@ import {
 } from '#validators/booking'
 import { inject } from '@adonisjs/core'
 import { BookingService } from '#services/booking_service'
-import { indexValidation } from '#validators/index'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) {}
+  constructor(private bookingService: BookingService) { }
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const {
-        params: { limit, page },
-      } = await request.validateUsing(indexValidation)
+      const { limit, page } = request.qs()
 
       const bookings = await this.bookingService.index({ page, limit, id: auth.user!.id })
 

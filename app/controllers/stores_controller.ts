@@ -5,14 +5,13 @@ import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
 import { AddressService } from '#services/address_service'
 import { inject } from '@adonisjs/core'
-import { indexValidation } from '#validators/index'
 
 @inject()
 export default class StoresController {
   constructor(
     private storeService: StoreService,
     private addressService: AddressService
-  ) {}
+  ) { }
 
   async store({ request, response }: HttpContext) {
     try {
@@ -159,9 +158,7 @@ export default class StoresController {
 
   async index({ request, response }: HttpContext) {
     try {
-      const {
-        params: { page, limit },
-      } = await request.validateUsing(indexValidation)
+      const { limit, page } = request.qs()
 
       const stores = await this.storeService.index({ page, limit })
 

@@ -8,19 +8,20 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
-import { indexValidation } from '#validators/index'
 
 @inject()
 export default class CompaniesController {
-  constructor(private companyService: CompanyService) {}
+  constructor(private companyService: CompanyService) { }
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const {
-        params: { limit, page },
-      } = await request.validateUsing(indexValidation)
+      const { limit, page } = request.qs()
 
-      const companies = await this.companyService.index({ page, limit, id: auth.user!.id })
+      const companies = await this.companyService.index({
+        page: page,
+        limit: limit,
+        id: auth.user!.id,
+      })
 
       return ReturnApi.success({
         response,

@@ -4,11 +4,10 @@ import { errors } from '@vinejs/vine'
 import { inject } from '@adonisjs/core'
 import { AdvertService } from '#services/advert_service'
 import { editAdvertValidation, idAdvertValidation, storeAdvertValidation } from '#validators/advert'
-import { indexValidation } from '#validators/index'
 
 @inject()
 export default class AdvertsController {
-  constructor(private adverService: AdvertService) {}
+  constructor(private adverService: AdvertService) { }
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -139,9 +138,7 @@ export default class AdvertsController {
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const {
-        params: { limit, page },
-      } = await request.validateUsing(indexValidation)
+      const { limit, page } = request.qs()
 
       const adverts = await this.adverService.index({ page, limit, id: auth.user!.id })
 

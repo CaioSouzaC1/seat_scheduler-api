@@ -7,7 +7,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class UsersController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   /**
    * Handle form submission for the create action

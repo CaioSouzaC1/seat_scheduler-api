@@ -4,11 +4,10 @@ import { errors } from '@vinejs/vine'
 import { orderIdValidator, orderStoreValidator } from '#validators/order'
 import { inject } from '@adonisjs/core'
 import { OrderService } from '#services/order_service'
-import { indexValidation } from '#validators/index'
 
 @inject()
 export default class OrdersController {
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService) { }
 
   async store({ request, response, auth }: HttpContext) {
     try {
@@ -40,9 +39,7 @@ export default class OrdersController {
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const {
-        params: { limit, page },
-      } = await request.validateUsing(indexValidation)
+      const { limit, page } = request.qs()
 
       const orders = await this.orderService.index({ page, limit, id: auth.user!.id })
 

@@ -25,7 +25,7 @@ export class StoreService {
 
         await store
           .related('attachement')
-          .create({ imagePath: '/uploads/companies/' + image.fileName })
+          .create({ imagePath: '/uploads/stores/' + image.fileName })
       }
     }
 
