@@ -11,9 +11,9 @@ export default class StoresController {
   constructor(
     private storeService: StoreService,
     private addressService: AddressService
-  ) { }
+  ) {}
 
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     try {
       const {
         name,
@@ -51,6 +51,7 @@ export default class StoresController {
       })
 
       await store.related('address').associate(address)
+      await store.related('user').attach([auth.user!.id])
 
       return ReturnApi.success({
         response,

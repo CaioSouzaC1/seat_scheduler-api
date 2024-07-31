@@ -15,7 +15,16 @@ export class TableService {
     status,
     storeId,
   }: IStoreInBulkTableRequest) {
-    for (let i = 0; i < numberOfTables; i++) {
+    const table = await Table.query().where('storeId', storeId).orderBy('number', 'desc').first()
+
+    let i = 1
+    let numberTables = numberOfTables
+    if (table) {
+      i = table.number
+      numberTables += i
+    }
+
+    for (i; i <= numberTables; i++) {
       await Table.create({ number: i, status, storeId, observation, numberOfChairs })
     }
   }
@@ -31,7 +40,7 @@ export class TableService {
 
     table.number = number ?? table.number
     table.status = status ?? table.status
-    table.observation = observation ?? table.observation
+    table.observation = observation ?? ''
     table.numberOfChairs = numberOfChairs ?? table.numberOfChairs
 
     await table.save()
@@ -48,7 +57,10 @@ export class TableService {
   }
 
   async index({ page, limit, id: storeId }: IIndexRequest) {
-    const tables = await Table.query().where('storeId', storeId!).paginate(page, limit)
+    const tables = await Table.query()
+      .where('storeId', storeId!)
+      .orderBy('number')
+      .paginate(page, limit)
 
     return tables.toJSON()
   }

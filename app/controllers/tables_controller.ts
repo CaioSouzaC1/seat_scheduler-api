@@ -13,7 +13,7 @@ import { idStoreValidation } from '#validators/store'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) { }
+  constructor(private tableService: TableService) {}
 
   async storeInBulk({ response, request }: HttpContext) {
     try {
@@ -87,7 +87,7 @@ export default class TablesController {
     }
   }
 
-  async edit({ request, response }: HttpContext) {
+  async edit({ request, response, auth }: HttpContext) {
     try {
       const {
         status,
@@ -95,7 +95,11 @@ export default class TablesController {
         numberOfChairs,
         number,
         params: { id },
-      } = await request.validateUsing(editTableValidation)
+      } = await request.validateUsing(editTableValidation, {
+        meta: {
+          userId: auth.user!.id,
+        },
+      })
 
       await this.tableService.edit({
         status,

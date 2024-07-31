@@ -1,16 +1,16 @@
 export interface IStoreInBulkTableRequest {
   numberOfTables: number
   numberOfChairs: number
-  observation: string
-  status: string
+  observation?: string
+  status?: string
   storeId: string
 }
 
 export interface IStoreTableRequest {
   number: number
   numberOfChairs: number
-  observation: string
-  status: string
+  observation?: string
+  status?: string
   storeId: string
 }
 
