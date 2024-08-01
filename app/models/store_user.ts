@@ -3,17 +3,25 @@ import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import UserType from './user_type.js'
+import Store from './store.js'
 
 export default class StoreUser extends BaseModel {
+  static table = 'store_user'
+
   @column({ isPrimary: true })
   declare id: string
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @belongsTo(() => UserType)
-  declare type: BelongsTo<typeof UserType>
+  @belongsTo(() => Store)
+  declare type: BelongsTo<typeof Store>
+
+  @column({ columnName: 'user_id' })
+  declare userId: string
+
+  @column({ columnName: 'store_id' })
+  declare storeId: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
