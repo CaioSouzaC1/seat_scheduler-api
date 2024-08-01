@@ -52,11 +52,11 @@ export default class Table extends BaseModel {
 
   @beforeFind()
   static bringRelation(query: ModelQueryBuilderContract<typeof Table>) {
-    query.preload('booking')
+    // query.preload('booking')
   }
 
   @beforeFetch()
   static bringRelationMany(query: ModelQueryBuilderContract<typeof Table>) {
-    query.preload('booking')
+    // query.preload('booking')
   }
 }

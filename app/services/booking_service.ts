@@ -1,4 +1,5 @@
 import Booking from '#models/booking'
+import Table from '#models/table'
 import {
   IBookingId,
   IEditBookingRequest,
@@ -35,10 +36,26 @@ export class BookingService {
     await booking?.delete()
   }
 
+  async accepted({ bookingId }: IBookingId) {
+    const booking = await Booking.find(bookingId)
+
+    booking!.status = 'reservado'
+
+    await booking?.save()
+  }
+
+  async reject({ bookingId }: IBookingId) {
+    const booking = await Booking.find(bookingId)
+
+    booking!.status = 'disponível'
+
+    await booking?.save()
+  }
+
   async index({ page, limit, id: userId }: IIndexRequest) {
     const bookies = await Booking.query()
       .preload('table', (tableQuery) => {
-        tableQuery.preload('store', (storeQuery) => {
+        tableQuery.whereHas('store', (storeQuery) => {
           storeQuery.preload('user', (userQuery) => {
             userQuery.where('id', userId!)
           })

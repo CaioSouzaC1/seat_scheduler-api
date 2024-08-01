@@ -11,6 +11,12 @@ export default class StoreUser extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
+  @column({ columnName: 'user_id' })
+  declare userId: string
+
+  @column({ columnName: 'store_id' })
+  declare storeId: string
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 

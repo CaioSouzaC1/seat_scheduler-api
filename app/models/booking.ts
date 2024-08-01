@@ -51,7 +51,6 @@ export default class Booking extends BaseModel {
 
   @beforeFetch()
   static bringRelationMany(query: ModelQueryBuilderContract<typeof Booking>) {
-    query.preload('table')
     query.preload('user')
   }
 }

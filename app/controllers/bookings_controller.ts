@@ -11,7 +11,7 @@ import { BookingService } from '#services/booking_service'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) { }
+  constructor(private bookingService: BookingService) {}
 
   async index({ request, response, auth }: HttpContext) {
     try {
@@ -22,12 +22,13 @@ export default class BookingsController {
       return ReturnApi.success({
         response,
         data: bookings,
-        message: 'Lista de agendamentos',
+        message: 'Lista de reservas',
       })
     } catch (err) {
+      console.log(err)
       return ReturnApi.error({
         response,
-        message: 'Error no agendamento',
+        message: 'Error no reserva',
         code: 400,
       })
     }
@@ -43,7 +44,7 @@ export default class BookingsController {
       return ReturnApi.success({
         response,
         code: 201,
-        message: 'Aguarde a resposta do agendamento',
+        message: 'Aguarde a resposta da reserva',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {
@@ -56,7 +57,7 @@ export default class BookingsController {
       }
       return ReturnApi.error({
         response,
-        message: 'Error no agendamento',
+        message: 'Error no reserva',
         code: 400,
       })
     }
@@ -74,7 +75,7 @@ export default class BookingsController {
 
       return ReturnApi.success({
         response,
-        message: 'Atualização de agendamento',
+        message: 'Atualização de reserva',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {
@@ -87,7 +88,7 @@ export default class BookingsController {
       }
       return ReturnApi.error({
         response,
-        message: 'Error na atualização agendamento',
+        message: 'Error na atualização reserva',
         code: 400,
       })
     }
@@ -104,7 +105,7 @@ export default class BookingsController {
       return ReturnApi.success({
         response,
         data: booking,
-        message: 'Agendamento encontrado com sucesso!',
+        message: 'Reserva encontrada com sucesso!',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {
@@ -117,7 +118,7 @@ export default class BookingsController {
       }
       return ReturnApi.error({
         response,
-        message: 'Error ao encontrar o agendamento',
+        message: 'Error ao encontrar o reserva',
         code: 400,
       })
     }
@@ -133,7 +134,7 @@ export default class BookingsController {
 
       return ReturnApi.success({
         response,
-        message: 'Agendamento apagado com sucesso!',
+        message: 'Reserva apagada com sucesso!',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {
@@ -146,7 +147,65 @@ export default class BookingsController {
       }
       return ReturnApi.error({
         response,
-        message: 'Error ao apagar o agendamento',
+        message: 'Error ao apagar o reserva',
+        code: 400,
+      })
+    }
+  }
+
+  async accepted({ request, response }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idBookingRequest)
+
+      await this.bookingService.accepted({ bookingId: id })
+
+      return ReturnApi.success({
+        response,
+        message: 'Reserva aceita com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao aceitar a reserva',
+        code: 400,
+      })
+    }
+  }
+
+  async rejected({ request, response }: HttpContext) {
+    try {
+      const {
+        params: { id },
+      } = await request.validateUsing(idBookingRequest)
+
+      await this.bookingService.reject({ bookingId: id })
+
+      return ReturnApi.success({
+        response,
+        message: 'Reserva negada com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao nagada o reserva',
         code: 400,
       })
     }
