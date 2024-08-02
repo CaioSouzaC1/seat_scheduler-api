@@ -8,6 +8,7 @@ router
     router.get('/:id', [TablesController, 'show'])
     router.put('/:id', [TablesController, 'edit'])
     router.delete('/:id', [TablesController, 'delete'])
+    router.delete('/', [TablesController, 'deleteInBulk'])
     router.post('/bulk', [TablesController, 'storeInBulk'])
     router.post('/', [TablesController, 'store'])
   })

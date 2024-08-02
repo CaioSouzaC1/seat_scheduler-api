@@ -25,3 +25,8 @@ export interface IEditTableRequest {
 export interface ITableIdRequest {
   tableId: string
 }
+
+export interface IDeleteInBulkRequest {
+  storeId: string
+  tables: string[]
+}

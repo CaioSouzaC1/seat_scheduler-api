@@ -199,4 +199,34 @@ test.group('Table test', (group) => {
 
     assert.isNull(tableOnDatabase)
   })
+
+  test('[DELETE] /tables', async ({ assert, client }) => {
+    await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const table = await makeTable()
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const company = await makeCompany({ name: 'company' })
+
+    const store = await makeStore({ name: 'store', companyId: company.id })
+
+    const body = { storeId: store.id, tables: [table.id] }
+
+    const { token } = login.body().data
+
+    const result = await client.delete(`/tables`).json(body).bearerToken(token)
+
+    result.assertStatus(200)
+
+    const tableOnDatabase = await Table.find(table.id)
+
+    assert.isNull(tableOnDatabase)
+  })
 })

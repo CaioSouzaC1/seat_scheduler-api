@@ -1,5 +1,6 @@
 import Table from '#models/table'
 import {
+  IDeleteInBulkRequest,
   IEditTableRequest,
   IStoreInBulkTableRequest,
   IStoreTableRequest,
@@ -54,6 +55,10 @@ export class TableService {
     const table = await Table.find(tableId)
 
     await table?.delete()
+  }
+
+  async deleteInBulk({ tables, storeId }: IDeleteInBulkRequest) {
+    await Table.query().where('store_id', storeId).whereIn('id', tables).delete()
   }
 
   async index({ page, limit, id: storeId }: IIndexRequest) {

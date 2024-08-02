@@ -4,6 +4,7 @@ import { errors } from '@vinejs/vine'
 import { inject } from '@adonisjs/core'
 import { TableService } from '#services/table_service'
 import {
+  DeleteInBulkTableValidation,
   editTableValidation,
   idTableValidation,
   storeInBulkTableValidation,
@@ -175,6 +176,36 @@ export default class TablesController {
       return ReturnApi.success({
         response,
         message: 'Mesa apagada com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao apagadar a mesa',
+        code: 400,
+      })
+    }
+  }
+
+  async deleteInBulk({ request, response }: HttpContext) {
+    try {
+      const { storeId, tables } = await request.validateUsing(DeleteInBulkTableValidation)
+
+      await this.tableService.deleteInBulk({
+        storeId,
+        tables,
+      })
+
+      return ReturnApi.success({
+        response,
+        message: 'Mesas apagadas com sucesso!',
       })
     } catch (err) {
       if (err instanceof errors.E_VALIDATION_ERROR) {

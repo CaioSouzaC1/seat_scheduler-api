@@ -89,3 +89,24 @@ export const idParamTableValidation = vine.compile(
     }),
   })
 )
+
+export const DeleteInBulkTableValidation = vine.compile(
+  vine.object({
+    tables: vine.array(
+      vine
+        .string()
+        .uuid()
+        .exists(async (db, value) => {
+          const table = await db.from('tables').where('id', value).first()
+          return !!table
+        })
+    ),
+    storeId: vine
+      .string()
+      .uuid()
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      }),
+  })
+)
