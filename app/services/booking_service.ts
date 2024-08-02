@@ -61,6 +61,7 @@ export class BookingService {
           })
         })
       })
+      .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
     return bookies.toJSON()
