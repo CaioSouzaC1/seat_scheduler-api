@@ -21,6 +21,7 @@ import '../routes/booking.routes.ts'
 import '../routes/order.routes.ts'
 import '../routes/evaluation.routes.ts'
 import '../routes/advert.routes.ts'
+import '../routes/notification.routes.js'
 
 import ws from '#services/ws'
 
