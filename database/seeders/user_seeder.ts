@@ -1,8 +1,10 @@
+import Notification from '#models/notification'
 import User from '#models/user'
 import UserHasType from '#models/user_has_type'
 import UserType from '#models/user_type'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
+import { faker } from '@faker-js/faker'
 import { randomUUID } from 'node:crypto'
 
 export default class extends BaseSeeder {
@@ -27,5 +29,16 @@ export default class extends BaseSeeder {
       userId: user.id,
       typeId: type.id,
     })
+
+    for (let index = 1; index <= 10; index++) {
+      Notification.create({
+        data: { data: faker.git.commitDate() },
+        read: faker.datatype.boolean(),
+        title: faker.word.adjective(),
+        userId: user!.id,
+        message: faker.lorem.lines(1),
+        type: faker.word.adjective(),
+      })
+    }
   }
 }

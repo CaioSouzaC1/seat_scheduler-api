@@ -11,7 +11,7 @@ import { test } from '@japa/runner'
 test.group('Booking test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
-  test('[POST] /bookings', async ({ assert, client }) => {
+  test('[POST] /books', async ({ assert, client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -43,7 +43,7 @@ test.group('Booking test', (group) => {
       storeId: store.id,
     }
 
-    const result = await client.post('/bookings').json(body).bearerToken(token)
+    const result = await client.post('/books').json(body).bearerToken(token)
 
     result.assertStatus(201)
 
@@ -52,7 +52,7 @@ test.group('Booking test', (group) => {
     assert.isOk(bookingOnDatabase)
   })
 
-  test('[PUT] /bookings', async ({ client, assert }) => {
+  test('[PUT] /books', async ({ client, assert }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -81,7 +81,7 @@ test.group('Booking test', (group) => {
 
     const body = { reservedDate: '02/02/2001' }
 
-    const result = await client.put(`/bookings/${booking.id}`).json(body).bearerToken(token)
+    const result = await client.put(`/books/${booking.id}`).json(body).bearerToken(token)
 
     result.assertStatus(200)
 
@@ -90,7 +90,7 @@ test.group('Booking test', (group) => {
     assert.equal(bookingOnDatabase?.reservedDate, '02/02/2001')
   })
 
-  test('[DELETE] /bookings', async ({ client, assert }) => {
+  test('[DELETE] /books', async ({ client, assert }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -117,7 +117,7 @@ test.group('Booking test', (group) => {
 
     const booking = await makeBooking({ reservedDate: '01/01/0001' })
 
-    const result = await client.delete(`/bookings/${booking.id}`).bearerToken(token)
+    const result = await client.delete(`/books/${booking.id}`).bearerToken(token)
 
     result.assertStatus(200)
 
@@ -126,7 +126,7 @@ test.group('Booking test', (group) => {
     assert.isNull(bookingOnDatabase)
   })
 
-  test('[GET] /bookings', async ({ client }) => {
+  test('[GET] /books', async ({ client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -153,7 +153,7 @@ test.group('Booking test', (group) => {
 
     await makeBooking({ reservedDate: '01/01/0001' })
 
-    const result = await client.get(`/bookings`).bearerToken(token)
+    const result = await client.get(`/books`).bearerToken(token)
 
     result.assertStatus(200)
 
@@ -191,7 +191,7 @@ test.group('Booking test', (group) => {
 
     const booking = await makeBooking({ reservedDate: '01/01/0001' })
 
-    const result = await client.get(`/bookings/${booking.id}`).bearerToken(token)
+    const result = await client.get(`/books/${booking.id}`).bearerToken(token)
 
     result.assertStatus(200)
 
