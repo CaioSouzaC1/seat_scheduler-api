@@ -38,11 +38,6 @@ export const editTableValidation = vine.withMetaData<{ userId: string }>().compi
     numberOfChairs: vine.number().optional(),
     status: vine.string().optional(),
     observation: vine.string().optional(),
-    // storeId: vine.string().use(
-    //   userHasStoreRule({
-    //     userId: 'userId',
-    //   })
-    // ),
     params: vine.object({
       id: vine
         .string()

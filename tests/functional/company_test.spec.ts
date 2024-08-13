@@ -130,7 +130,7 @@ test.group('Company test', (group) => {
     assert.isNull(companyOnDatabase)
   })
 
-  test('[GET] /companies/:id', async ({ client }) => {
+  test('[GET] /companies/:id', async ({ assert, client }) => {
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
