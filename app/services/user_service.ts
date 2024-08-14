@@ -6,6 +6,7 @@ import {
   IUserIdRequest,
   IStoreUserRequest,
   IEditUserRequest,
+  IStoreClientRequest,
 } from '../interfaces/Requests/User/index.js'
 import { AddressService } from './address_service.js'
 import UserType from '#models/user_type'
@@ -134,5 +135,35 @@ export class UserService {
     await userOnDatabase?.save()
 
     return userOnDatabase
+  }
+
+  async storeClient({
+    name,
+    password,
+    phone,
+    email,
+    address: { cep, city, state, number, street, country, complement, neighborhood },
+  }: IStoreClientRequest): Promise<User> {
+    const address = await this.addressService.store({
+      cep,
+      city,
+      state,
+      number,
+      street,
+      country,
+      complement,
+      neighborhood,
+    })
+
+    const user = await User.create({
+      email,
+      name,
+      phone,
+      password,
+    })
+
+    await user.related('address').associate(address)
+
+    return user
   }
 }

@@ -1,5 +1,5 @@
 import { UserService } from '#services/user_service'
-import { storeUserValidation, updateUserValidation } from '#validators/user'
+import { storeClientValidation, storeUserValidation, updateUserValidation } from '#validators/user'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import ReturnApi from '../utils/return_api.js'
@@ -7,7 +7,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class UsersController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   /**
    * Handle form submission for the create action
@@ -152,6 +152,69 @@ export default class UsersController {
       return ReturnApi.error({
         response,
         message: 'Error ao atualizar o usuário',
+        code: 400,
+      })
+    }
+  }
+
+  async storeClient({ response, request }: HttpContext) {
+    try {
+      const {
+        email,
+        name,
+        phone,
+        password,
+        cep,
+        city,
+        state,
+        number,
+        street,
+        country,
+        complement,
+        neighborhood,
+      } = await request.validateUsing(storeClientValidation)
+
+      const user = await this.userService.storeClient({
+        email,
+        name,
+        phone,
+        password,
+        address: {
+          cep,
+          city,
+          state,
+          number,
+          street,
+          country,
+          neighborhood,
+          complement,
+        },
+      })
+
+      await this.userService.countLogin(user)
+
+      await this.userService.lastLogin(user)
+
+      const token = await this.userService.createToken(user)
+
+      return ReturnApi.success({
+        response,
+        data: { user, token },
+        code: 201,
+        message: 'Usuário criado com sucesso!',
+      })
+    } catch (err) {
+      if (err instanceof errors.E_VALIDATION_ERROR) {
+        return ReturnApi.error({
+          response,
+          message: err.message,
+          data: err.messages,
+          code: 400,
+        })
+      }
+      return ReturnApi.error({
+        response,
+        message: 'Error ao criar o Usuário',
         code: 400,
       })
     }

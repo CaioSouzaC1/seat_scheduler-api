@@ -55,3 +55,20 @@ export const updateUserValidation = vine.compile(
       .optional(),
   })
 )
+
+export const storeClientValidation = vine.compile(
+  vine.object({
+    name: vine.string(),
+    email: vine.string().email(),
+    password: vine.string(),
+    phone: vine.string(),
+    cep: vine.string(),
+    country: vine.string(),
+    state: vine.string(),
+    city: vine.string(),
+    neighborhood: vine.string(),
+    street: vine.string(),
+    number: vine.number(),
+    complement: vine.string().optional(),
+  })
+)

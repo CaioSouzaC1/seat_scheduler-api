@@ -31,3 +31,11 @@ export interface IUserIdRequest {
 export interface IFindByEmailUserRequest {
   email: string
 }
+
+export interface IStoreClientRequest {
+  email: string
+  name: string
+  phone: string
+  password: string
+  address: IStoreAddressRequest
+}

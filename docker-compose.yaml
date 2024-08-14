@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16.3
+    restart: always
     container_name: postgres-seat-scheduler-api
     ports:
       - 5432:5432
