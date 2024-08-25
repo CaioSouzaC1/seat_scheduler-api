@@ -36,6 +36,7 @@ export class CompanyService {
       name,
       cnpj,
       userId,
+      addressId: address.id,
     })
 
     if (images) {

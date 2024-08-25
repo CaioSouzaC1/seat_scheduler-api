@@ -12,20 +12,26 @@ test.group('Advert test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /adverts', async ({ client, assert }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
+      addressId: address.id,
       email: 'johndoe@mail.com',
       password: '123',
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
+
+    await user.related('store').attach([store.id])
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -37,6 +43,7 @@ test.group('Advert test', (group) => {
     const body = {
       name: 'name',
       type: 'type',
+      storeId: store.id,
     }
 
     const result = await client
@@ -54,22 +61,29 @@ test.group('Advert test', (group) => {
   })
 
   test('[SHOW] /adverts/:id', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    const advert = await makeAdvert()
+    const advert = await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -90,22 +104,28 @@ test.group('Advert test', (group) => {
   })
 
   test('[DELETE] /adverts/:id', async ({ client, assert }) => {
+    const address = await makeAddress()
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    const advert = await makeAdvert()
+    const advert = await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -124,22 +144,29 @@ test.group('Advert test', (group) => {
   })
 
   test('[PUT] /adverts/:id', async ({ client, assert }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    const advert = await makeAdvert()
+    const advert = await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -168,23 +195,34 @@ test.group('Advert test', (group) => {
   })
 
   test('[GET] /adverts/', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    await makeAdvert()
-    await makeAdvert()
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
+
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -194,6 +232,60 @@ test.group('Advert test', (group) => {
     const { token } = login.body().data
 
     const result = await client.get('/adverts').bearerToken(token)
+
+    result.assertStatus(200)
+
+    result.assertBodyContains({
+      data: {
+        data: [{ id: String }],
+      },
+    })
+  })
+
+  test('[GET] /adverts/owns', async ({ client }) => {
+    const address = await makeAddress()
+
+    const user = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+      addressId: address.id,
+    })
+
+    const userCompany = await makeUser({
+      addressId: address.id,
+    })
+
+    const company = await makeCompany({
+      name: 'company',
+      userId: userCompany.id,
+      addressId: address.id,
+    })
+
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
+
+    await user.related('store').attach([store.id])
+
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
+
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const result = await client.get('/adverts/owns').bearerToken(token)
 
     result.assertStatus(200)
 

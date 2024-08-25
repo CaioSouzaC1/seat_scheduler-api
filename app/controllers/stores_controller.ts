@@ -48,9 +48,9 @@ export default class StoresController {
         description,
         companyId,
         images,
+        addressId: address.id,
       })
 
-      await store.related('address').associate(address)
       await store.related('user').attach([auth.user!.id])
 
       return ReturnApi.success({

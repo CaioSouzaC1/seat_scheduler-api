@@ -9,8 +9,8 @@ import { cuid } from '@adonisjs/core/helpers'
 import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class AdvertService {
-  async store({ name, type, images, companyId }: IStoreAdvertRequest) {
-    const advert = await Advert.create({ name, type, companyId })
+  async store({ name, type, images, companyId, storeId }: IStoreAdvertRequest) {
+    const advert = await Advert.create({ name, type, companyId, storeId })
 
     for (const image of images) {
       await image.move(app.makePath('uploads/adverts'), {
@@ -54,14 +54,16 @@ export class AdvertService {
     await advert?.delete()
   }
 
-  async index({ page, limit, id: userId }: IIndexRequest) {
+  async index({ page, limit }: IIndexRequest) {
+    const advert = await Advert.query().paginate(page, limit)
+
+    return advert.toJSON()
+  }
+
+  async myOwn({ page, limit, ids: storeIds }: IIndexRequest) {
     const advert = await Advert.query()
-      .preload('company', (companyQuery) => {
-        companyQuery.preload('user', (userQuery) => {
-          userQuery.preload('store', (storeQuery) => {
-            storeQuery.where('userId', userId!)
-          })
-        })
+      .whereHas('store', (storeQuery) => {
+        storeQuery.whereIn('id', storeIds!)
       })
       .paginate(page, limit)
 

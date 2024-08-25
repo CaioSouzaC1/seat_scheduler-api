@@ -9,12 +9,21 @@ import app from '@adonisjs/core/services/app'
 import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class StoreService {
-  async store({ name, phone, companyId, description, images }: IStoreStoreRequest) {
+  async store({
+    name,
+    phone,
+    companyId,
+    description,
+    images,
+    addressId,
+  }: IStoreStoreRequest) {
+
     const store = await Store.create({
       name,
       phone,
       companyId,
       description,
+      addressId,
     })
 
     if (images) {

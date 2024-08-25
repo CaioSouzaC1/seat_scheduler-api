@@ -98,11 +98,15 @@ export default class User extends compose(BaseModel, AuthFinder) {
   static bringRelation(query: ModelQueryBuilderContract<typeof User>) {
     query.preload('company')
     query.preload('address')
+    query.preload('store')
+    query.preload('type')
   }
 
   @beforeFetch()
   static bringRelationMany(query: ModelQueryBuilderContract<typeof User>) {
     query.preload('company')
     query.preload('address')
+    query.preload('store')
+    query.preload('type')
   }
 }

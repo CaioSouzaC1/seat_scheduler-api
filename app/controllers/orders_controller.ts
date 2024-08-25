@@ -4,6 +4,7 @@ import { errors } from '@vinejs/vine'
 import { orderIdValidator, orderStoreValidator } from '#validators/order'
 import { inject } from '@adonisjs/core'
 import { OrderService } from '#services/order_service'
+import { messages } from '@vinejs/vine/defaults'
 
 @inject()
 export default class OrdersController {
@@ -21,6 +22,7 @@ export default class OrdersController {
         message: 'Pedido anotado com sucesso!',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
@@ -41,7 +43,9 @@ export default class OrdersController {
     try {
       const { limit, page } = request.qs()
 
-      const orders = await this.orderService.index({ page, limit, id: auth.user!.id })
+      const storeIds = auth.user!.store.map((store) => store.id)
+
+      const orders = await this.orderService.index({ page, limit, ids: storeIds })
 
       return ReturnApi.success({
         response,
@@ -49,6 +53,7 @@ export default class OrdersController {
         message: 'Lista de pedidos',
       })
     } catch (err) {
+      console.log(err)
       return ReturnApi.error({
         response,
         message: 'Error ao listar o pedido',

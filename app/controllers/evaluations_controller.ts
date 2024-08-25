@@ -11,7 +11,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class EvaluationsController {
-  constructor(private evaluationService: EvaluationService) { }
+  constructor(private evaluationService: EvaluationService) {}
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -134,11 +134,11 @@ export default class EvaluationsController {
     }
   }
 
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     try {
       const { limit, page } = request.qs()
 
-      const evaluations = await this.evaluationService.index({ limit, page })
+      const evaluations = await this.evaluationService.index({ limit, page, id: auth.user!.id })
 
       return ReturnApi.success({
         response,

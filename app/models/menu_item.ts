@@ -14,6 +14,9 @@ export default class MenuItem extends BaseModel {
   @column()
   declare price: number
 
+  @column()
+  declare description: string
+
   @column({ columnName: 'store_id' })
   declare storeId: string
 

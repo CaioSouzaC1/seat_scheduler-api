@@ -11,9 +11,9 @@ export default class extends BaseSchema {
       table.string('observation').nullable()
       table.string('reserved_date').notNullable()
 
-      table.uuid('user_id').references('users.id').onDelete('CASCADE')
-      table.uuid('table_id').references('tables.id').onDelete('CASCADE')
-      table.uuid('store_id').references('stores.id').onDelete('CASCADE')
+      table.uuid('user_id').references('users.id').onDelete('CASCADE').notNullable()
+      table.uuid('table_id').references('tables.id').onDelete('CASCADE').notNullable()
+      table.uuid('store_id').references('stores.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())

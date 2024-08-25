@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, beforeFetch, belongsTo, column } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  belongsTo,
+  column,
+} from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Table from './table.js'
@@ -49,8 +56,17 @@ export default class Booking extends BaseModel {
     model.id = randomUUID()
   }
 
+  @beforeFind()
+  static bringRelation(query: ModelQueryBuilderContract<typeof Booking>) {
+    query.preload('store')
+    query.preload('user')
+    query.preload('table')
+  }
+
   @beforeFetch()
   static bringRelationMany(query: ModelQueryBuilderContract<typeof Booking>) {
+    query.preload('store')
     query.preload('user')
+    query.preload('table')
   }
 }

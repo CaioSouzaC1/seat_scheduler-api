@@ -1,4 +1,5 @@
 import User from '#models/user'
+import { makeAddress } from '#tests/utils/factories/make_address'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -6,11 +7,14 @@ test.group('Session test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /login', async ({ client }) => {
+    const address = await makeAddress()
+
     await User.create({
       email: 'johndoe@mail.com',
       password: '123',
       name: 'john doe',
       phone: '123123',
+      addressId: address.id,
     })
 
     const body = {
@@ -30,11 +34,14 @@ test.group('Session test', (group) => {
   })
 
   test('[GET] /me', async ({ client }) => {
+    const address = await makeAddress()
+
     await User.create({
       email: 'johndoe@mail.com',
       password: '123',
       name: 'john doe',
       phone: '123123',
+      addressId: address.id,
     })
 
     const body = {

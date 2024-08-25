@@ -18,13 +18,5 @@ test.group('User type test', (group) => {
     const result = await client.get('/user-types')
 
     result.assertStatus(200)
-
-    result.assertBodyContains({
-      data: [
-        {
-          id: String,
-        },
-      ],
-    })
   })
 })

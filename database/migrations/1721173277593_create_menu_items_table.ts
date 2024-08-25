@@ -7,11 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
 
-      table.string('name')
-      table.float('price')
-      table.string('description')
+      table.string('name').notNullable()
+      table.float('price').notNullable()
+      table.string('description').notNullable()
 
-      table.uuid('store_id').references('stores.id').onDelete('CASCADE')
+      table.uuid('store_id').references('stores.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())

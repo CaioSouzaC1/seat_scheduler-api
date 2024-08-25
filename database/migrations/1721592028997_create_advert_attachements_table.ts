@@ -7,9 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
 
-      table.string('image_path')
+      table.string('image_path').notNullable()
 
-      table.uuid('advert_id').references('adverts.id').onDelete('CASCADE')
+      table.uuid('advert_id').references('adverts.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
@@ -20,4 +20,3 @@ export default class extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
-

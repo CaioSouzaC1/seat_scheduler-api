@@ -2,6 +2,7 @@ import User from '#models/user'
 import UserHasType from '#models/user_has_type'
 import UserType from '#models/user_type'
 import { makeAddress } from '#tests/utils/factories/make_address'
+import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeStore } from '#tests/utils/factories/make_store'
 import { makeUser } from '#tests/utils/factories/make_user'
 import testUtils from '@adonisjs/core/services/test_utils'
@@ -12,7 +13,22 @@ test.group('User test', (group) => {
 
   test('[POST] /users', async ({ client, assert }) => {
     await UserType.create({ name: 'operator' })
-    const store = await makeStore()
+
+    const address = await makeAddress()
+
+    const user = await makeUser({
+      addressId: address.id,
+    })
+
+    const company = await makeCompany({
+      addressId: address.id,
+      userId: user.id,
+    })
+
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     const body = {
       cep: '12701050',
@@ -70,10 +86,13 @@ test.group('User test', (group) => {
   })
 
   test('[DELETE] /users/', async ({ client, assert }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@gmail.com',
       password: '123',
       name: 'John Doe',
+      addressId: address.id,
     })
 
     const login = await client.post('/login').json({

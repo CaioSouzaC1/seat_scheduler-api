@@ -7,8 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary().defaultTo(this.db.rawQuery('uuid_generate_v4()').knexQuery)
 
-      table.uuid('user_id').references('users.id').onDelete('CASCADE')
-      table.uuid('type_id').references('user_types.id').onDelete('CASCADE')
+      table.uuid('user_id').references('users.id').onDelete('CASCADE').notNullable()
+      table.uuid('type_id').references('user_types.id').onDelete('CASCADE').notNullable()
+
       table.unique(['user_id', 'type_id'])
 
       table.timestamp('created_at').defaultTo(this.now())

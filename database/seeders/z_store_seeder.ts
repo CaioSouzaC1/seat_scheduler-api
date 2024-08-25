@@ -9,10 +9,21 @@ import { randomUUID } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { promises as fs } from 'node:fs'
 import StoreAttachement from '#models/store_attachement'
+import { makeUser } from '#tests/utils/factories/make_user'
 
 export default class extends BaseSeeder {
   async run() {
-    const company = await makeCompany()
+    const address = await makeAddress()
+
+    const companyUser = await makeUser({
+      addressId: address.id,
+    })
+
+    const company = await makeCompany({
+      addressId: address.id,
+      userId: companyUser.id,
+    })
+
     const imagePath = join(resolve(), '/tests/utils/', 'dog-marine.jpg')
     const image = await fs.readFile(imagePath)
     const uploadPath = join(resolve(), 'uploads/companies', 'dog-marine.jpg')
@@ -23,7 +34,6 @@ export default class extends BaseSeeder {
       companyId: company.id,
       imagePath: '/uploads/companies/dog-marine.jpg',
     })
-    const address = await makeAddress()
 
     const store = await Store.create({
       id: randomUUID(),

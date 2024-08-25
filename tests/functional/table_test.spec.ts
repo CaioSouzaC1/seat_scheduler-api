@@ -5,27 +5,33 @@ import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeStore } from '#tests/utils/factories/make_store'
 import { makeTable } from '#tests/utils/factories/make_table'
 import { makeUser } from '#tests/utils/factories/make_user'
+import { compose } from '@adonisjs/core/helpers'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { dir } from 'node:console'
 
 test.group('Table test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /tables/bulk', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -48,20 +54,24 @@ test.group('Table test', (group) => {
   })
 
   test('[POST] /tables', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -90,12 +100,23 @@ test.group('Table test', (group) => {
   })
 
   test('[GET] /tables/{id}/all', async ({ client }) => {
-    await makeUser({
+    const address = await makeAddress()
+
+    const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const store = await makeStore()
+    const company = await makeCompany({
+      addressId: address.id,
+      userId: user.id,
+    })
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
+
     await makeTable({ storeId: store.id })
 
     const login = await client.post('/login').json({
@@ -117,20 +138,28 @@ test.group('Table test', (group) => {
   })
 
   test('[GET] /tables/{id}', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const table = await makeTable()
+    const store = await makeStore({
+      companyId: company.id,
+      addressId: address.id,
+    })
+
+    const table = await makeTable({
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -151,9 +180,12 @@ test.group('Table test', (group) => {
   })
 
   test('[PUT] /tables/{id}', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
     const login = await client.post('/login').json({
@@ -167,7 +199,15 @@ test.group('Table test', (group) => {
       numberOfChairs: 10,
     }
 
-    const store = await makeStore()
+    const company = await makeCompany({
+      addressId: address.id,
+      userId: user.id,
+    })
+
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     await StoreUser.create({
       storeId: store.id,
@@ -189,12 +229,22 @@ test.group('Table test', (group) => {
   })
 
   test('[DELETE] /tables/{id}', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const store = await makeStore()
+    const company = await makeCompany({
+      addressId: address.id,
+      userId: user.id,
+    })
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     await StoreUser.create({
       storeId: store.id,

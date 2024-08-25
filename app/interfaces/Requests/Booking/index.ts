@@ -1,5 +1,6 @@
 export interface IStoreBookingRequest {
   tableId: string
+  userId: string
   observation?: string
   reservedDate: string
   storeId: string

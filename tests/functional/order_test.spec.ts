@@ -13,24 +13,32 @@ test.group('Order test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /orders', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    const table = await makeTable({ storeId: store.id })
+    const table = await makeTable({
+      storeId: store.id,
+    })
 
-    const item = await makeMenuItem()
+    const item = await makeMenuItem({
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -51,24 +59,29 @@ test.group('Order test', (group) => {
   })
 
   test('[GET] /orders', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({ addressId: address.id, companyId: company.id })
+
+    await user.related('store').attach([store.id])
 
     const table = await makeTable({ storeId: store.id })
 
-    const item = await makeMenuItem()
+    const item = await makeMenuItem({
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -78,7 +91,7 @@ test.group('Order test', (group) => {
     const { token } = login.body().data
 
     await makeOrder({
-      itemId: item.id,
+      menuItemId: item.id,
       tableId: table.id,
       userId: user.id,
     })
@@ -95,24 +108,30 @@ test.group('Order test', (group) => {
   })
 
   test('[GET] /orders/:id', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
     const table = await makeTable({ storeId: store.id })
 
-    const item = await makeMenuItem()
+    const item = await makeMenuItem({
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -122,7 +141,7 @@ test.group('Order test', (group) => {
     const { token } = login.body().data
 
     const order = await makeOrder({
-      itemId: item.id,
+      menuItemId: item.id,
       tableId: table.id,
       userId: user.id,
     })
@@ -139,24 +158,27 @@ test.group('Order test', (group) => {
   })
 
   test('[DELETE] /orders/:id', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    const store = await makeStore()
+    const store = await makeStore({ companyId: company.id, addressId: address.id })
 
     const table = await makeTable({ storeId: store.id })
 
-    const item = await makeMenuItem()
+    const item = await makeMenuItem({
+      storeId: store.id,
+    })
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
@@ -166,7 +188,7 @@ test.group('Order test', (group) => {
     const { token } = login.body().data
 
     const order = await makeOrder({
-      itemId: item.id,
+      menuItemId: item.id,
       tableId: table.id,
       userId: user.id,
     })

@@ -4,16 +4,14 @@ import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class OrderService {
   async store({ itemId, userId, tableId }: IStoreOrderRequest) {
-    itemId.map(async (id) => await Order.create({ itemId: id, userId, tableId }))
+    itemId.map(async (id) => await Order.create({ menuItemId: id, userId, tableId }))
   }
 
-  async index({ page, limit, id: userId }: IIndexRequest) {
+  async index({ page, limit, ids: storeIds }: IIndexRequest) {
     const orders = await Order.query()
-      .preload('table', (tableQuery) => {
-        tableQuery.preload('store', (storeQuery) => {
-          storeQuery.preload('user', (userQuery) => {
-            userQuery.where('user_id', userId!)
-          })
+      .whereHas('table', (tableQuery) => {
+        tableQuery.whereHas('store', (storeQuery) => {
+          storeQuery.whereIn('id', storeIds!)
         })
       })
       .paginate(page, limit)

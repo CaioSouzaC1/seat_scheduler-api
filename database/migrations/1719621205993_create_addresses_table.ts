@@ -15,7 +15,7 @@ export default class extends BaseSchema {
       table.string('street').notNullable()
       table.integer('number').notNullable()
 
-      table.string('complement').nullable()
+      table.string('complement')
 
       table.timestamp('created_at').defaultTo(this.now())
       table.timestamp('updated_at').defaultTo(this.now())

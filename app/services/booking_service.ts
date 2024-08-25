@@ -1,5 +1,4 @@
 import Booking from '#models/booking'
-import Table from '#models/table'
 import {
   IBookingId,
   IEditBookingRequest,
@@ -9,8 +8,8 @@ import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 import ws from './ws.js'
 
 export class BookingService {
-  async store({ tableId, observation, reservedDate, storeId }: IStoreBookingRequest) {
-    await Booking.create({ tableId, observation, reservedDate, storeId })
+  async store({ tableId, observation, reservedDate, storeId, userId }: IStoreBookingRequest) {
+    await Booking.create({ tableId, observation, reservedDate, storeId, userId })
 
     ws.io?.emit(`notify.${storeId}`, { message: `Reservation for ${reservedDate}` })
   }
@@ -52,18 +51,13 @@ export class BookingService {
     await booking?.save()
   }
 
-  async index({ page, limit, id: userId }: IIndexRequest) {
-    const bookies = await Booking.query()
-      .preload('table', (tableQuery) => {
-        tableQuery.whereHas('store', (storeQuery) => {
-          storeQuery.preload('user', (userQuery) => {
-            userQuery.where('id', userId!)
-          })
-        })
+  async index({ page, limit, ids: storeIds }: IIndexRequest) {
+    const bookings = await Booking.query()
+      .whereHas('store', (storeQuery) => {
+        storeQuery.whereIn('id', storeIds!)
       })
-      .orderBy('created_at', 'desc')
       .paginate(page, limit)
 
-    return bookies.toJSON()
+    return bookings.toJSON()
   }
 }

@@ -9,4 +9,5 @@ export interface IIndexRequest {
   page: number
   limit: number
   id?: string
+  ids?: string[]
 }

@@ -18,6 +18,7 @@ import Company from './company.js'
 import StoreAttachement from './store_attachement.js'
 import User from './user.js'
 import Evaluation from './evaluation.js'
+import Advert from './advert.js'
 
 export default class Store extends BaseModel {
   @column({ isPrimary: true })
@@ -52,6 +53,9 @@ export default class Store extends BaseModel {
 
   @hasOne(() => Evaluation)
   declare evaluation: HasOne<typeof Evaluation>
+
+  @hasOne(() => Advert)
+  declare advert: HasOne<typeof Advert>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

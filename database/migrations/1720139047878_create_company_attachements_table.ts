@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
 
-      table.uuid('company_id').references('companies.id').onDelete('CASCADE')
+      table.uuid('company_id').references('companies.id').onDelete('CASCADE').notNullable()
       table.string('image_path').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())

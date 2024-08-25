@@ -1,17 +1,28 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  belongsTo,
+  column,
+} from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Table from './table.js'
 import MenuItem from './menu_item.js'
 import { randomUUID } from 'node:crypto'
+import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
+  @column()
+  declare status: string
+
   @column({ columnName: 'menu_item_id' })
-  declare itemId: string
+  declare menuItemId: string
 
   @column({ columnName: 'table_id' })
   declare tableId: string
@@ -37,5 +48,19 @@ export default class Order extends BaseModel {
   @beforeCreate()
   static async createUuid(model: Order) {
     model.id = randomUUID()
+  }
+
+  @beforeFind()
+  static bringRelation(query: ModelQueryBuilderContract<typeof Order>) {
+    query.preload('user')
+    query.preload('menu')
+    query.preload('table')
+  }
+
+  @beforeFetch()
+  static bringRelationMany(query: ModelQueryBuilderContract<typeof Order>) {
+    query.preload('user')
+    query.preload('menu')
+    query.preload('table')
   }
 }

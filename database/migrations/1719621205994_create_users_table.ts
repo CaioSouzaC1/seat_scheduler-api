@@ -11,14 +11,15 @@ export default class extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
 
-      table.timestamp('created_at', { useTz: true }).notNullable()
-      table.timestamp('updated_at', { useTz: true }).nullable()
+      table.uuid('address_id').references('addresses.id').onDelete('CASCADE').notNullable()
 
-      table.uuid('address_id').references('addresses.id').onDelete('CASCADE')
-
-      table.string('last_login').nullable()
       table.integer('login_count').defaultTo(0)
-      table.string('image_path').nullable()
+
+      table.string('image_path')
+      table.string('last_login')
+
+      table.timestamp('created_at', { useTz: true }).defaultTo(this.now()).notNullable()
+      table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
   }
 

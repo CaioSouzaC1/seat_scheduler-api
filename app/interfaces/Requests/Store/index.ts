@@ -1,6 +1,7 @@
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 
 export interface IStoreStoreRequest {
+  addressId: string
   name: string
   phone: string
   description: string

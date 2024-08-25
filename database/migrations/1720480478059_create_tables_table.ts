@@ -8,10 +8,11 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
 
       table.integer('number').notNullable()
-      table.string('observation').nullable()
+      table.string('observation')
+
       table.string('status').notNullable().defaultTo('Livre')
 
-      table.uuid('store_id').references('stores.id').onDelete('CASCADE')
+      table.uuid('store_id').references('stores.id').onDelete('CASCADE').notNullable()
 
       table.integer('number_of_chairs').notNullable()
 
@@ -24,4 +25,3 @@ export default class extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
-

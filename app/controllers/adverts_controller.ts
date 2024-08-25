@@ -7,13 +7,19 @@ import { editAdvertValidation, idAdvertValidation, storeAdvertValidation } from 
 
 @inject()
 export default class AdvertsController {
-  constructor(private adverService: AdvertService) { }
+  constructor(private adverService: AdvertService) {}
 
   async store({ response, request, auth }: HttpContext) {
     try {
-      const { name, type, images } = await request.validateUsing(storeAdvertValidation)
+      const { name, type, images, storeId } = await request.validateUsing(storeAdvertValidation)
 
-      await this.adverService.store({ name, type, images, companyId: auth.user!.company.id })
+      await this.adverService.store({
+        name,
+        type,
+        images,
+        companyId: auth.user!.company.id,
+        storeId,
+      })
 
       return ReturnApi.success({
         response,
@@ -136,11 +142,11 @@ export default class AdvertsController {
     }
   }
 
-  async index({ request, response, auth }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     try {
       const { limit, page } = request.qs()
 
-      const adverts = await this.adverService.index({ page, limit, id: auth.user!.id })
+      const adverts = await this.adverService.index({ page, limit })
 
       return ReturnApi.success({
         response,
@@ -148,6 +154,28 @@ export default class AdvertsController {
         message: 'Lista de anúncios',
       })
     } catch {
+      return ReturnApi.error({
+        response,
+        message: 'Error ao listar as anúncios',
+        code: 400,
+      })
+    }
+  }
+
+  async ownIndex({ request, response, auth }: HttpContext) {
+    try {
+      const { limit, page } = request.qs()
+
+      const storeIds = auth.user?.store.map((store) => store.id)
+      const adverts = await this.adverService.myOwn({ page, limit, ids: storeIds })
+
+      return ReturnApi.success({
+        response,
+        data: adverts,
+        message: 'Lista de anúncios',
+      })
+    } catch (e) {
+      console.log(e)
       return ReturnApi.error({
         response,
         message: 'Error ao listar as anúncios',

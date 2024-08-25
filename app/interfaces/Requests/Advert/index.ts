@@ -2,6 +2,7 @@ import { MultipartFile } from '@adonisjs/core/bodyparser'
 
 export interface IStoreAdvertRequest {
   companyId: string
+  storeId: string
   name: string
   type: string
   images: MultipartFile[]

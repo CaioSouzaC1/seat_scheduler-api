@@ -10,8 +10,8 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.string('cnpj').notNullable()
 
-      table.uuid('address_id').references('addresses.id').onDelete('CASCADE')
-      table.uuid('user_id').references('users.id').onDelete('CASCADE')
+      table.uuid('address_id').references('addresses.id').onDelete('CASCADE').notNullable()
+      table.uuid('user_id').references('users.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())

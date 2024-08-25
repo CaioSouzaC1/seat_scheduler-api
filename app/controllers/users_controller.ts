@@ -57,6 +57,7 @@ export default class UsersController {
         message: 'Usuário criado com sucesso!',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

@@ -7,8 +7,12 @@ import {
 import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class EvaluationService {
-  async index({ page, limit }: IIndexRequest) {
-    const evaluation = await Evaluation.query().paginate(page, limit)
+  async index({ page, limit, id: userId }: IIndexRequest) {
+    const evaluation = await Evaluation.query()
+      .whereHas('user', (query) => {
+        query.where('id', userId!)
+      })
+      .paginate(page, limit)
 
     return evaluation.toJSON()
   }

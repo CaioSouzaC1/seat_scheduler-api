@@ -64,7 +64,7 @@ export class TableService {
   async index({ page, limit, id: storeId }: IIndexRequest) {
     const tables = await Table.query()
       .where('storeId', storeId!)
-      .orderBy('number')
+      .orderBy('number', 'desc')
       .paginate(page, limit)
 
     return tables.toJSON()

@@ -11,8 +11,8 @@ export default class extends BaseSchema {
       table.string('phone').notNullable()
       table.string('description').notNullable()
 
-      table.uuid('address_id').references('addresses.id').onDelete('CASCADE')
-      table.uuid('company_id').references('companies.id').onDelete('CASCADE')
+      table.uuid('address_id').references('addresses.id').onDelete('CASCADE').notNullable()
+      table.uuid('company_id').references('companies.id').onDelete('CASCADE').notNullable()
 
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())

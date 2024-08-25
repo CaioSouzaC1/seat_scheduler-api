@@ -17,7 +17,9 @@ export default class BookingsController {
     try {
       const { limit, page } = request.qs()
 
-      const bookings = await this.bookingService.index({ page, limit, id: auth.user!.id })
+      const storeIds = auth.user?.store.map((store) => store.id)
+
+      const bookings = await this.bookingService.index({ page, limit, ids: storeIds })
 
       return ReturnApi.success({
         response,
@@ -34,12 +36,18 @@ export default class BookingsController {
     }
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     try {
       const { tableId, observation, reservedDate, storeId } =
         await request.validateUsing(storeBookingValidation)
 
-      await this.bookingService.store({ tableId, observation, reservedDate, storeId })
+      await this.bookingService.store({
+        tableId,
+        observation,
+        reservedDate,
+        storeId,
+        userId: auth.user!.id,
+      })
 
       return ReturnApi.success({
         response,
@@ -47,6 +55,7 @@ export default class BookingsController {
         message: 'Aguarde a resposta da reserva',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

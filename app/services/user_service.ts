@@ -40,9 +40,8 @@ export class UserService {
       name,
       phone,
       password,
+      addressId: address.id,
     })
-
-    await user.related('address').associate(address)
 
     type = type ? type : 'operator'
 

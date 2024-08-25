@@ -11,9 +11,12 @@ test.group('Company test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[POST] /companies', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
     const login = await client.post('/login').json({
@@ -51,12 +54,13 @@ test.group('Company test', (group) => {
   })
 
   test('[PUT] /companies/:id', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
-
-    const address = await makeAddress()
 
     const company = await makeCompany({
       name: 'company',
@@ -101,12 +105,13 @@ test.group('Company test', (group) => {
   })
 
   test('[DELETE] /companies/:id', async ({ assert, client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
-
-    const address = await makeAddress()
 
     const company = await makeCompany({
       name: 'company',
@@ -130,13 +135,14 @@ test.group('Company test', (group) => {
     assert.isNull(companyOnDatabase)
   })
 
-  test('[GET] /companies/:id', async ({ assert, client }) => {
+  test('[GET] /companies/:id', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
-
-    const address = await makeAddress()
 
     const company = await makeCompany({
       name: 'company',
@@ -163,12 +169,13 @@ test.group('Company test', (group) => {
   })
 
   test('[GET] /companies', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
-
-    const address = await makeAddress()
 
     await makeCompany({
       name: 'company',

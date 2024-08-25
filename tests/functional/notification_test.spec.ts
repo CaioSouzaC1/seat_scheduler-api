@@ -11,23 +11,34 @@ test.group('Notification test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
 
   test('[GET] /notifications/', async ({ client }) => {
+    const address = await makeAddress()
+
     const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
 
-    const address = await makeAddress()
-
-    await makeCompany({
+    const company = await makeCompany({
       name: 'company',
       userId: user.id,
       addressId: address.id,
     })
 
-    await makeStore()
+    const store = await makeStore({
+      addressId: address.id,
+      companyId: company.id,
+    })
 
-    await makeAdvert()
-    await makeAdvert()
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
+
+    await makeAdvert({
+      companyId: company.id,
+      storeId: store.id,
+    })
 
     await makeNotification({
       userId: user.id,

@@ -4,6 +4,13 @@ export const storeAdvertValidation = vine.compile(
   vine.object({
     name: vine.string(),
     type: vine.string(),
+    storeId: vine
+      .string()
+      .uuid()
+      .exists(async (db, value) => {
+        const store = await db.from('stores').where('id', value).first()
+        return store ? true : false
+      }),
 
     images: vine.array(
       vine.file({
