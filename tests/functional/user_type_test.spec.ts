@@ -13,6 +13,9 @@ test.group('User type test', (group) => {
       {
         name: 'operator',
       },
+      {
+        name: 'client',
+      },
     ])
 
     const result = await client.get('/user-types')
