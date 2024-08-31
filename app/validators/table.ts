@@ -4,7 +4,7 @@ export const storeInBulkTableValidation = vine.compile(
   vine.object({
     numberOfTables: vine.number().min(1),
     numberOfChairs: vine.number(),
-    status: vine.string().optional(),
+    status: vine.enum(['available', 'scheduled', 'busy']),
     observation: vine.string().optional(),
     storeId: vine
       .string()
@@ -20,7 +20,7 @@ export const storeTableValidation = vine.compile(
   vine.object({
     number: vine.number(),
     numberOfChairs: vine.number(),
-    status: vine.string().optional(),
+    status: vine.enum(['available', 'scheduled', 'busy']).optional(),
     observation: vine.string().optional(),
     storeId: vine
       .string()
@@ -36,7 +36,7 @@ export const editTableValidation = vine.withMetaData<{ userId: string }>().compi
   vine.object({
     number: vine.number().optional(),
     numberOfChairs: vine.number().optional(),
-    status: vine.string().optional(),
+    status: vine.enum(['available', 'scheduled', 'busy']).optional(),
     observation: vine.string().optional(),
     params: vine.object({
       id: vine

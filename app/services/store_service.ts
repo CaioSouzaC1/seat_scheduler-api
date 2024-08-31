@@ -9,15 +9,7 @@ import app from '@adonisjs/core/services/app'
 import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 export class StoreService {
-  async store({
-    name,
-    phone,
-    companyId,
-    description,
-    images,
-    addressId,
-  }: IStoreStoreRequest) {
-
+  async store({ name, phone, companyId, description, images, addressId }: IStoreStoreRequest) {
     const store = await Store.create({
       name,
       phone,
@@ -79,6 +71,12 @@ export class StoreService {
 
   async index({ page, limit }: IIndexRequest) {
     const stores = await Store.query().paginate(page, limit)
+
+    return stores.toJSON()
+  }
+
+  async myOwn({ page, limit, ids }: IIndexRequest) {
+    const stores = await Store.query().whereIn('id', ids!).paginate(page, limit)
 
     return stores.toJSON()
   }

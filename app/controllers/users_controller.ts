@@ -175,7 +175,7 @@ export default class UsersController {
         neighborhood,
       } = await request.validateUsing(storeClientValidation)
 
-      const user = await this.userService.storeClient({
+      await this.userService.storeClient({
         email,
         name,
         phone,
@@ -192,11 +192,13 @@ export default class UsersController {
         },
       })
 
-      await this.userService.countLogin(user)
+      let user = await this.userService.findByEmail({ email })
 
-      await this.userService.lastLogin(user)
+      await this.userService.countLogin(user!)
 
-      const token = await this.userService.createToken(user)
+      user = await this.userService.lastLogin(user!)
+
+      const token = await this.userService.createToken(user!)
 
       return ReturnApi.success({
         response,

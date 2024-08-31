@@ -198,4 +198,25 @@ export default class StoresController {
       })
     }
   }
+
+  async ownIndex({ request, response, auth }: HttpContext) {
+    try {
+      const { limit, page } = request.qs()
+
+      const storeIds = auth.user?.store.map((store) => store.id)
+
+      const stores = await this.storeService.myOwn({ page, limit, ids: storeIds })
+      return ReturnApi.success({
+        response,
+        data: stores,
+        message: 'Lista de loja!',
+      })
+    } catch {
+      return ReturnApi.error({
+        response,
+        message: 'Error ao listar as lojas',
+        code: 400,
+      })
+    }
+  }
 }

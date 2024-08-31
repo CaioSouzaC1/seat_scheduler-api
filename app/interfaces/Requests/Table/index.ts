@@ -1,12 +1,15 @@
-export interface IStoreInBulkTableRequest {
+export interface ITableStatus {
+  status?: 'available' | 'scheduled' | 'busy'
+}
+
+export interface IStoreInBulkTableRequest extends ITableStatus {
   numberOfTables: number
   numberOfChairs: number
   observation?: string
-  status?: string
   storeId: string
 }
 
-export interface IStoreTableRequest {
+export interface IStoreTableRequest extends ITableStatus {
   number: number
   numberOfChairs: number
   observation?: string
@@ -14,12 +17,11 @@ export interface IStoreTableRequest {
   storeId: string
 }
 
-export interface IEditTableRequest {
+export interface IEditTableRequest extends ITableStatus {
   tableId: string
   number?: number
   numberOfChairs?: number
   observation?: string
-  status?: string
 }
 
 export interface ITableIdRequest {

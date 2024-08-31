@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.integer('number').notNullable()
       table.string('observation')
 
-      table.string('status').notNullable().defaultTo('Livre')
+      table.enum('status', ['available', 'scheduled', 'busy']).defaultTo('available')
 
       table.uuid('store_id').references('stores.id').onDelete('CASCADE').notNullable()
 

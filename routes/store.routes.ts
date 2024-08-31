@@ -4,6 +4,8 @@ import router from '@adonisjs/core/services/router'
 
 router
   .group(() => {
+    router.get('/owns', [StoresController, 'ownIndex'])
+
     router.put('/:id', [StoresController, 'edit'])
     router.delete('/:id', [StoresController, 'delete'])
     router.get('/:id', [StoresController, 'show'])
