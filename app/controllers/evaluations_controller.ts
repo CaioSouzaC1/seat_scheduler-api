@@ -11,13 +11,13 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class EvaluationsController {
-  constructor(private evaluationService: EvaluationService) {}
+  constructor(private evaluationService: EvaluationService) { }
 
-  async store({ response, request, auth }: HttpContext) {
+  async store({ response, request }: HttpContext) {
     try {
-      const { note, storeId, description } = await request.validateUsing(storeEvaluationValidation)
+      const { note, description } = await request.validateUsing(storeEvaluationValidation)
 
-      await this.evaluationService.store({ note, storeId, description, userId: auth.user!.id })
+      await this.evaluationService.store({ note, description })
 
       return ReturnApi.success({
         response,

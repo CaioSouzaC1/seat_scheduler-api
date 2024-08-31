@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface ITableStatus {
   status?: 'available' | 'scheduled' | 'busy'
 }
@@ -13,7 +14,6 @@ export interface IStoreTableRequest extends ITableStatus {
   number: number
   numberOfChairs: number
   observation?: string
-  status?: string
   storeId: string
 }
 

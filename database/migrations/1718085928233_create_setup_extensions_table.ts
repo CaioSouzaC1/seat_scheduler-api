@@ -9,4 +9,3 @@ export default class extends BaseSchema {
     this.schema.raw('DROP EXTENSION IF EXISTS "uuid-ossp"')
   }
 }
-

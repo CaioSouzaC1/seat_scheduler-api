@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface IStoreEvaluation {
-  userId: string
-  storeId: string
   note: number
   description?: string
 }

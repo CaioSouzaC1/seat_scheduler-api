@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { IEditAddressRequest, IStoreAddressRequest } from '../Address/index.js'
 
 export interface IStoreUserRequest {

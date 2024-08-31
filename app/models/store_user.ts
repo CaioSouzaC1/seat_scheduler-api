@@ -23,12 +23,6 @@ export default class StoreUser extends BaseModel {
   @belongsTo(() => Store)
   declare type: BelongsTo<typeof Store>
 
-  @column({ columnName: 'user_id' })
-  declare userId: string
-
-  @column({ columnName: 'store_id' })
-  declare storeId: string
-
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

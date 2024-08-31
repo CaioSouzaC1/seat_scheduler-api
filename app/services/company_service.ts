@@ -12,7 +12,7 @@ import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) { }
+  constructor(private addressService: AddressService) {}
 
   async store({
     cnpj,

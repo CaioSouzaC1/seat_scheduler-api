@@ -2,8 +2,6 @@ import { DateTime } from 'luxon'
 import {
   BaseModel,
   beforeCreate,
-  beforeFetch,
-  beforeFind,
   belongsTo,
   column,
   hasMany,
@@ -11,7 +9,6 @@ import {
   manyToMany,
 } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
-import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
 import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Company from './company.js'

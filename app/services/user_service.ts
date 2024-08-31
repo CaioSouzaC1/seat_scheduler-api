@@ -13,7 +13,7 @@ import UserType from '#models/user_type'
 
 @inject()
 export class UserService {
-  constructor(private addressService: AddressService) { }
+  constructor(private addressService: AddressService) {}
 
   async store({
     name,

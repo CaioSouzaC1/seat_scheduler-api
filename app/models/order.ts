@@ -1,18 +1,10 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  beforeCreate,
-  beforeFetch,
-  beforeFind,
-  belongsTo,
-  column,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Table from './table.js'
 import MenuItem from './menu_item.js'
 import { randomUUID } from 'node:crypto'
-import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })

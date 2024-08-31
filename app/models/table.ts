@@ -1,17 +1,8 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  beforeCreate,
-  beforeFetch,
-  beforeFind,
-  belongsTo,
-  column,
-  hasMany,
-} from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'node:crypto'
 import Store from './store.js'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Booking from './booking.js'
 
 export default class Table extends BaseModel {

@@ -5,7 +5,7 @@ import ReturnApi from '../utils/return_api.js'
 
 @inject()
 export default class UserTypesController {
-  constructor(private userTypeService: UserTypeService) { }
+  constructor(private userTypeService: UserTypeService) {}
 
   async index({ response }: HttpContext) {
     try {

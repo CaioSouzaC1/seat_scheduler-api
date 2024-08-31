@@ -14,7 +14,7 @@ import { idStoreValidation } from '#validators/store'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) { }
+  constructor(private tableService: TableService) {}
 
   async storeInBulk({ response, request }: HttpContext) {
     try {

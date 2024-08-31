@@ -1,4 +1,4 @@
-import { IReturnApiDTO } from '../interfaces/ReturnApi/index.js'
+import IReturnApiDTO from '../interfaces/ReturnApi/index.js'
 
 export default class ReturnApi {
   static success({ response, data = null, message = '', code = 200 }: IReturnApiDTO) {

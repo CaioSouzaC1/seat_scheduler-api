@@ -7,7 +7,7 @@ import ReturnApi from '../utils/return_api.js'
 
 @inject()
 export default class SessionController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   async login({ request, response }: HttpContext) {
     const { email, password } = await authSesssionValidator.validate(request.body())

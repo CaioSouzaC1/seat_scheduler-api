@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { IEditAddressRequest, IStoreAddressRequest } from '../Address/index.js'
 

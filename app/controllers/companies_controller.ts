@@ -11,7 +11,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class CompaniesController {
-  constructor(private companyService: CompanyService) { }
+  constructor(private companyService: CompanyService) {}
 
   async index({ request, response, auth }: HttpContext) {
     try {

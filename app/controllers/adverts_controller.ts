@@ -7,7 +7,7 @@ import { editAdvertValidation, idAdvertValidation, storeAdvertValidation } from 
 
 @inject()
 export default class AdvertsController {
-  constructor(private adverService: AdvertService) { }
+  constructor(private adverService: AdvertService) {}
 
   async store({ response, request, auth }: HttpContext) {
     try {

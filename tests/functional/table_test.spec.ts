@@ -268,7 +268,7 @@ test.group('Table test', (group) => {
     assert.isNull(tableOnDatabase)
   })
 
-  test('[DELETE] /tables', async ({ assert, client }) => {
+  test('[DELETE] /tables', async ({ client }) => {
     await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
@@ -292,7 +292,5 @@ test.group('Table test', (group) => {
     const result = await client.delete(`/tables`).json(body).bearerToken(token)
 
     result.assertStatus(200)
-
-    const tableOnDatabase = await Table.find(table.id)
   }).skip()
 })

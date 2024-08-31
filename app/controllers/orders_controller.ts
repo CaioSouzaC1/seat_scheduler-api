@@ -4,11 +4,10 @@ import { errors } from '@vinejs/vine'
 import { orderIdValidator, orderStoreValidator } from '#validators/order'
 import { inject } from '@adonisjs/core'
 import { OrderService } from '#services/order_service'
-import { messages } from '@vinejs/vine/defaults'
 
 @inject()
 export default class OrdersController {
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService) { }
 
   async store({ request, response, auth }: HttpContext) {
     try {

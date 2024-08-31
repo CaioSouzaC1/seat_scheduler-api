@@ -1,4 +1,5 @@
-export interface IReturnApiDTO {
+/* eslint-disable @typescript-eslint/naming-convention */
+export default interface IReturnApiDTO {
   response: any
   data?: any
   message: string

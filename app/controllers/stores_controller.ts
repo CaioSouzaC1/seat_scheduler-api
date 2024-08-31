@@ -12,7 +12,7 @@ export default class StoresController {
   constructor(
     private storeService: StoreService,
     private addressService: AddressService
-  ) { }
+  ) {}
 
   async store({ request, response, auth }: HttpContext) {
     try {

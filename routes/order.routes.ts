@@ -1,6 +1,5 @@
 const OrdersController = () => import('#controllers/orders_controller')
 import { middleware } from '#start/kernel'
-import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 
 router
@@ -9,7 +8,6 @@ router
     router.get('/', [OrdersController, 'index'])
     router.get('/:id', [OrdersController, 'show'])
     router.delete('/:id', [OrdersController, 'delete'])
-    // router.put('/', [OrdersController, 'edit'])
   })
   .use(middleware.auth())
   .prefix('orders')
