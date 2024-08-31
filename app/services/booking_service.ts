@@ -24,7 +24,12 @@ export class BookingService {
   }
 
   async show({ bookingId }: IBookingId) {
-    const booking = await Booking.find(bookingId)
+    const booking = await Booking.query()
+      .preload('store')
+      .preload('user')
+      .preload('table')
+      .where('id', bookingId)
+      .first()
 
     return booking
   }
@@ -53,6 +58,9 @@ export class BookingService {
 
   async index({ page, limit, ids: storeIds }: IIndexRequest) {
     const bookings = await Booking.query()
+      .preload('store')
+      .preload('user')
+      .preload('table')
       .whereHas('store', (storeQuery) => {
         storeQuery.whereIn('id', storeIds!)
       })

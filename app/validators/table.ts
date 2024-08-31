@@ -1,10 +1,8 @@
 import vine from '@vinejs/vine'
-import { userHasStoreRule } from '../rules/user_has_store.js'
 export const storeInBulkTableValidation = vine.compile(
   vine.object({
     numberOfTables: vine.number().min(1),
     numberOfChairs: vine.number(),
-    status: vine.enum(['available', 'scheduled', 'busy']),
     observation: vine.string().optional(),
     storeId: vine
       .string()
@@ -20,7 +18,6 @@ export const storeTableValidation = vine.compile(
   vine.object({
     number: vine.number(),
     numberOfChairs: vine.number(),
-    status: vine.enum(['available', 'scheduled', 'busy']).optional(),
     observation: vine.string().optional(),
     storeId: vine
       .string()

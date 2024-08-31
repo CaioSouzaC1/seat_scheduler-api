@@ -45,16 +45,4 @@ export default class Evaluation extends BaseModel {
   static async createUuid(model: Evaluation) {
     model.id = randomUUID()
   }
-
-  @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof Evaluation>) {
-    query.preload('store')
-    query.preload('user')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof Evaluation>) {
-    query.preload('store')
-    query.preload('user')
-  }
 }

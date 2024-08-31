@@ -2,9 +2,9 @@ import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import {
+  afterFind,
   BaseModel,
   beforeCreate,
-  beforeFetch,
   beforeFind,
   belongsTo,
   column,
@@ -16,11 +16,11 @@ import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { randomUUID } from 'node:crypto'
 import Company from './company.js'
 import type { BelongsTo, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
-import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import Address from './address.js'
 import Store from './store.js'
 import UserType from './user_type.js'
 import Evaluation from './evaluation.js'
+import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -95,18 +95,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   }
 
   @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof User>) {
+  static ignoreDeleted(query: ModelQueryBuilderContract<typeof User>) {
     query.preload('company')
     query.preload('address')
-    query.preload('store')
     query.preload('type')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof User>) {
-    query.preload('company')
-    query.preload('address')
     query.preload('store')
-    query.preload('type')
   }
 }

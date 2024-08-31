@@ -5,13 +5,14 @@ import ReturnApi from '../utils/return_api.js'
 import { errors } from '@vinejs/vine'
 import { AddressService } from '#services/address_service'
 import { inject } from '@adonisjs/core'
+import { type } from 'node:os'
 
 @inject()
 export default class StoresController {
   constructor(
     private storeService: StoreService,
     private addressService: AddressService
-  ) {}
+  ) { }
 
   async store({ request, response, auth }: HttpContext) {
     try {
@@ -157,11 +158,15 @@ export default class StoresController {
     }
   }
 
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     try {
       const { limit, page } = request.qs()
+      let stores
 
-      const stores = await this.storeService.index({ page, limit })
+      if (auth.user?.type.some(() => type.name === 'client')) {
+        const storeIds = auth.user?.store.map((store) => store.id)
+        stores = await this.storeService.myOwn({ page, limit, ids: storeIds })
+      } else stores = await this.storeService.index({ page, limit })
 
       return ReturnApi.success({
         response,
@@ -194,27 +199,6 @@ export default class StoresController {
       return ReturnApi.error({
         response,
         message: 'Error ao encontrar o loja',
-        code: 400,
-      })
-    }
-  }
-
-  async ownIndex({ request, response, auth }: HttpContext) {
-    try {
-      const { limit, page } = request.qs()
-
-      const storeIds = auth.user?.store.map((store) => store.id)
-
-      const stores = await this.storeService.myOwn({ page, limit, ids: storeIds })
-      return ReturnApi.success({
-        response,
-        data: stores,
-        message: 'Lista de loja!',
-      })
-    } catch {
-      return ReturnApi.error({
-        response,
-        message: 'Error ao listar as lojas',
         code: 400,
       })
     }

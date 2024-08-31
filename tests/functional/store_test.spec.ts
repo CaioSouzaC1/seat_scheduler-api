@@ -1,4 +1,6 @@
 import Store from '#models/store'
+import UserHasType from '#models/user_has_type'
+import UserType from '#models/user_type'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeStore } from '#tests/utils/factories/make_store'
@@ -152,5 +154,51 @@ test.group('Store test', (group) => {
     const storeOnDatabase = await Store.find(store.id)
 
     assert.isNull(storeOnDatabase)
+  })
+})
+
+test.group('Stores Client', (group) => {
+  group.each.setup(() => testUtils.db().migrate())
+
+  test('[GET] /stores', async ({ client }) => {
+    const address = await makeAddress()
+
+    const user = await makeUser({ addressId: address.id })
+
+    const company = await makeCompany({ addressId: address.id, userId: user.id })
+
+    const store = await makeStore({ companyId: company.id, addressId: address.id })
+
+    const type = await UserType.create({
+      name: 'client',
+    })
+
+    const userClient = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+      addressId: address.id,
+    })
+
+    UserHasType.create({
+      userId: userClient.id,
+      typeId: type.id,
+    })
+
+    const login = await client.post('/login').json({
+      email: 'johndoe@mail.com',
+      password: '123',
+    })
+
+    const { token } = login.body().data
+
+    const result = await client.get('/stores').bearerToken(token)
+
+    result.assertStatus(200)
+
+    result.assertBodyContains({
+      data: {
+        data: [{ id: store.id }],
+      },
+    })
   })
 })

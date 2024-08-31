@@ -9,6 +9,9 @@ export class OrderService {
 
   async index({ page, limit, ids: storeIds }: IIndexRequest) {
     const orders = await Order.query()
+      .preload('user')
+      .preload('menu')
+      .preload('table')
       .whereHas('table', (tableQuery) => {
         tableQuery.whereHas('store', (storeQuery) => {
           storeQuery.whereIn('id', storeIds!)
@@ -20,7 +23,12 @@ export class OrderService {
   }
 
   async show({ orderId }: IOrderIdRequest) {
-    const order = await Order.find(orderId)
+    const order = await Order.query()
+      .preload('user')
+      .preload('menu')
+      .preload('table')
+      .where('id', orderId)
+      .first()
 
     return order
   }

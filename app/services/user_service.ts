@@ -13,7 +13,7 @@ import UserType from '#models/user_type'
 
 @inject()
 export class UserService {
-  constructor(private addressService: AddressService) {}
+  constructor(private addressService: AddressService) { }
 
   async store({
     name,
@@ -95,7 +95,14 @@ export class UserService {
   }
 
   async findByEmail({ email }: IFindByEmailUserRequest): Promise<User | null> {
-    const user = await User.findBy('email', email)
+    const user = await User.query()
+      .preload('company')
+      .preload('address')
+      .preload('type')
+      .preload('store')
+      .preload('evaluation')
+      .where('email', email)
+      .first()
 
     if (!user) {
       return null
@@ -105,7 +112,14 @@ export class UserService {
   }
 
   async findById({ userId }: IUserIdRequest): Promise<User | null> {
-    const user = await User.find(userId)
+    const user = await User.query()
+      .preload('company')
+      .preload('address')
+      .preload('type')
+      .preload('store')
+      .preload('evaluation')
+      .where('id', userId)
+      .first()
 
     return user
   }
@@ -117,7 +131,14 @@ export class UserService {
   }
 
   async countLogin(user: User) {
-    const userOnDatabase = await User.find(user.id)
+    const userOnDatabase = await User.query()
+      .preload('company')
+      .preload('address')
+      .preload('type')
+      .preload('store')
+      .preload('evaluation')
+      .where('id', user.id)
+      .first()
 
     userOnDatabase!.loginCount++
 
@@ -127,7 +148,13 @@ export class UserService {
   async lastLogin(user: User) {
     Settings.defaultZone = 'America/Sao_Paulo'
 
-    const userOnDatabase = await User.find(user.id)
+    const userOnDatabase = await User.query()
+      .preload('company')
+      .preload('address')
+      .preload('type')
+      .preload('store')
+      .where('id', user.id)
+      .first()
 
     userOnDatabase!.lastLogin = DateTime.now().setLocale('pt-BR').toLocaleString()
 

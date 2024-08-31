@@ -45,7 +45,12 @@ export class AdvertService {
   }
 
   async show({ advertId }: IAdvertRequestId) {
-    return await Advert.find(advertId)
+    return await Advert.query()
+      .preload('attachements')
+      .preload('company')
+      .preload('store')
+      .where('id', advertId)
+      .first()
   }
 
   async delete({ advertId }: IAdvertRequestId) {
@@ -55,13 +60,20 @@ export class AdvertService {
   }
 
   async index({ page, limit }: IIndexRequest) {
-    const advert = await Advert.query().paginate(page, limit)
+    const advert = await Advert.query()
+      .preload('attachements')
+      .preload('company')
+      .preload('store')
+      .paginate(page, limit)
 
     return advert.toJSON()
   }
 
   async myOwn({ page, limit, ids: storeIds }: IIndexRequest) {
     const advert = await Advert.query()
+      .preload('attachements')
+      .preload('company')
+      .preload('store')
       .whereHas('store', (storeQuery) => {
         storeQuery.whereIn('id', storeIds!)
       })

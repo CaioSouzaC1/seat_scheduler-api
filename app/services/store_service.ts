@@ -66,17 +66,40 @@ export class StoreService {
   }
 
   async show({ storeId }: IStoreIdRequest) {
-    return await Store.find(storeId)
+    return await Store.query()
+      .preload('attachement')
+      .preload('user')
+      .preload('evaluation')
+      .preload('advert')
+      .preload('address')
+      .preload('company')
+      .where('id', storeId)
+      .first()
   }
 
   async index({ page, limit }: IIndexRequest) {
-    const stores = await Store.query().paginate(page, limit)
+    const stores = await Store.query()
+      .preload('attachement')
+      .preload('user')
+      .preload('evaluation')
+      .preload('advert')
+      .preload('address')
+      .preload('company')
+      .paginate(page, limit)
 
     return stores.toJSON()
   }
 
   async myOwn({ page, limit, ids }: IIndexRequest) {
-    const stores = await Store.query().whereIn('id', ids!).paginate(page, limit)
+    const stores = await Store.query()
+      .preload('attachement')
+      .preload('user')
+      .preload('evaluation')
+      .preload('advert')
+      .preload('address')
+      .preload('company')
+      .whereIn('id', ids!)
+      .paginate(page, limit)
 
     return stores.toJSON()
   }

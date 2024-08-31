@@ -49,14 +49,4 @@ export default class Table extends BaseModel {
   static async createUuid(model: Table) {
     model.id = randomUUID()
   }
-
-  @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof Table>) {
-    // query.preload('booking')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof Table>) {
-    // query.preload('booking')
-  }
 }

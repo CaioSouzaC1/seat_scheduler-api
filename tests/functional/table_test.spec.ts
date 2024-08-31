@@ -5,10 +5,8 @@ import { makeCompany } from '#tests/utils/factories/make_company'
 import { makeStore } from '#tests/utils/factories/make_store'
 import { makeTable } from '#tests/utils/factories/make_table'
 import { makeUser } from '#tests/utils/factories/make_user'
-import { compose } from '@adonisjs/core/helpers'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
-import { dir } from 'node:console'
 
 test.group('Table test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
@@ -45,7 +43,6 @@ test.group('Table test', (group) => {
       storeId: store.id,
       numberOfChairs: 10,
       observation: 'closed door',
-      status: 'avaliable',
     }
 
     const result = await client.post('/tables/bulk').json(body).bearerToken(token)
@@ -85,7 +82,6 @@ test.group('Table test', (group) => {
       storeId: store.id,
       numberOfChairs: 10,
       observation: 'closed door',
-      status: 'avaliable',
     }
 
     const result = await client.post('/tables').json(body).bearerToken(token)

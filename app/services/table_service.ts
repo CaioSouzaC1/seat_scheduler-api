@@ -30,8 +30,8 @@ export class TableService {
     }
   }
 
-  async store({ number, status, storeId, observation, numberOfChairs }: IStoreTableRequest) {
-    return await Table.create({ number, status, storeId, observation, numberOfChairs })
+  async store({ number, storeId, observation, numberOfChairs }: IStoreTableRequest) {
+    return await Table.create({ number, storeId, observation, numberOfChairs })
   }
 
   async edit({ tableId, number, status, observation, numberOfChairs }: IEditTableRequest) {
@@ -48,7 +48,7 @@ export class TableService {
   }
 
   async show({ tableId }: ITableIdRequest) {
-    return await Table.find(tableId)
+    return await Table.query().preload('booking').preload('store').where('id', tableId).first()
   }
 
   async delete({ tableId }: ITableIdRequest) {
@@ -63,6 +63,8 @@ export class TableService {
 
   async index({ page, limit, id: storeId }: IIndexRequest) {
     const tables = await Table.query()
+      .preload('store')
+      .preload('booking')
       .where('storeId', storeId!)
       .orderBy('number', 'desc')
       .paginate(page, limit)

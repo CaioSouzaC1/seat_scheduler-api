@@ -9,6 +9,8 @@ import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 export class EvaluationService {
   async index({ page, limit, id: userId }: IIndexRequest) {
     const evaluation = await Evaluation.query()
+      .preload('store')
+      .preload('user')
       .whereHas('user', (query) => {
         query.where('id', userId!)
       })
@@ -33,7 +35,10 @@ export class EvaluationService {
   }
 
   async show({ evaluationId }: IEvaluationId) {
-    const evaluation = await Evaluation.find(evaluationId)
+    const evaluation = await Evaluation.query()
+      .preload('user')
+      .preload('store')
+      .where('id', evaluationId)
 
     return evaluation
   }

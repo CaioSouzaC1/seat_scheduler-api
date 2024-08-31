@@ -67,16 +67,4 @@ export default class Store extends BaseModel {
   static async createUuid(model: Store) {
     model.id = randomUUID()
   }
-
-  @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof Store>) {
-    query.preload('address')
-    query.preload('company')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof Store>) {
-    query.preload('attachement')
-    query.preload('company')
-  }
 }

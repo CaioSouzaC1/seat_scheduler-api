@@ -2,6 +2,7 @@ import User from '#models/user'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { get } from 'node:http'
 
 test.group('Session test', (group) => {
   group.each.setup(() => testUtils.db().migrate())
@@ -58,5 +59,13 @@ test.group('Session test', (group) => {
     result.assertStatus(200)
 
     result.assertBodyContains({ id: String })
+  })
+
+  test('[GET] /checktoken', async ({ client }) => {
+    const tokenInvalid =
+      'oat_MQ.UEFld1J5ejZDYUtpcnFvMXUwWEdXLUtLMzNNMVQ0ZDRxN25mem5XMTIyNDMxNTc1MzU'
+
+    const result = await client.get('/checktoken').bearerToken(tokenInvalid)
+    result.assertStatus(401)
   })
 })

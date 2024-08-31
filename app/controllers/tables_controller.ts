@@ -14,19 +14,19 @@ import { idStoreValidation } from '#validators/store'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) {}
+  constructor(private tableService: TableService) { }
 
   async storeInBulk({ response, request }: HttpContext) {
     try {
-      const { numberOfTables, storeId, numberOfChairs, observation, status } =
-        await request.validateUsing(storeInBulkTableValidation)
+      const { numberOfTables, storeId, numberOfChairs, observation } = await request.validateUsing(
+        storeInBulkTableValidation
+      )
 
       const table = await this.tableService.storeInBulk({
         numberOfTables,
         storeId,
         numberOfChairs,
         observation,
-        status,
       })
 
       return ReturnApi.success({
@@ -54,7 +54,7 @@ export default class TablesController {
 
   async store({ response, request }: HttpContext) {
     try {
-      const { number, storeId, numberOfChairs, observation, status } =
+      const { number, storeId, numberOfChairs, observation } =
         await request.validateUsing(storeTableValidation)
 
       const table = await this.tableService.store({
@@ -62,7 +62,6 @@ export default class TablesController {
         storeId,
         numberOfChairs,
         observation,
-        status,
       })
 
       return ReturnApi.success({

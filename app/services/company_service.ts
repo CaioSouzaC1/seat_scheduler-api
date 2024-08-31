@@ -12,7 +12,7 @@ import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) {}
+  constructor(private addressService: AddressService) { }
 
   async store({
     cnpj,
@@ -109,14 +109,24 @@ export class CompanyService {
   }
 
   async show({ companyId, userId }: ICompanyIdRequest) {
-    const company = await Company.findBy({ id: companyId, user_id: userId })
+    const company = await Company.query()
+      .preload('attachement')
+      .preload('user')
+      .preload('advert')
+      .preload('address')
+      .where({ id: companyId, user_id: userId })
+      .first()
 
     return company
   }
 
   async index({ page, limit, id: userId }: IIndexRequest) {
     const companies = await Company.query()
-      .preload('user', (userQuery) => {
+      .preload('attachement')
+      .preload('user')
+      .preload('advert')
+      .preload('address')
+      .whereHas('user', (userQuery) => {
         userQuery.where('id', userId!)
       })
       .paginate(page, limit)

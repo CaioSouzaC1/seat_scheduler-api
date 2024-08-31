@@ -49,18 +49,4 @@ export default class Order extends BaseModel {
   static async createUuid(model: Order) {
     model.id = randomUUID()
   }
-
-  @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof Order>) {
-    query.preload('user')
-    query.preload('menu')
-    query.preload('table')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof Order>) {
-    query.preload('user')
-    query.preload('menu')
-    query.preload('table')
-  }
 }

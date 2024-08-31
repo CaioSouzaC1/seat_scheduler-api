@@ -15,7 +15,7 @@ export class NotificationService {
   }
 
   async readed({ notificationId }: INotificationId) {
-    const notification = await Notification.find(notificationId)
+    const notification = await Notification.query().where('id', notificationId).first()
 
     if (!notification) return
 
