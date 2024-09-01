@@ -11,7 +11,7 @@ import { BookingService } from '#services/booking_service'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) {}
+  constructor(private bookingService: BookingService) { }
 
   async index({ request, response, auth }: HttpContext) {
     try {
@@ -19,7 +19,7 @@ export default class BookingsController {
 
       const storeIds = auth.user?.store.map((store) => store.id)
 
-      const bookings = await this.bookingService.index({ page, limit, ids: storeIds })
+      const bookings = await this.bookingService.index({ page, limit, ids: storeIds! })
 
       return ReturnApi.success({
         response,

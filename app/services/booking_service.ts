@@ -4,7 +4,7 @@ import {
   IEditBookingRequest,
   IStoreBookingRequest,
 } from '../interfaces/Requests/Booking/index.js'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexWithIdsRequest } from '../interfaces/ReturnApi/index.js'
 import ws from './ws.js'
 
 export class BookingService {
@@ -56,7 +56,7 @@ export class BookingService {
     await booking?.save()
   }
 
-  async index({ page, limit, ids: storeIds }: IIndexRequest) {
+  async index({ page, limit, ids: storeIds }: IIndexWithIdsRequest) {
     const bookings = await Booking.query()
       .preload('store')
       .preload('user')

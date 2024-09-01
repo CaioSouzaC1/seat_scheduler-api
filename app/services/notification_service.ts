@@ -5,7 +5,7 @@ import {
   INotificationId,
   IStoreNotificationRequest,
 } from '../interfaces/Requests/Notification/index.js'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexWithIdRequest } from '../interfaces/ReturnApi/index.js'
 import ws from './ws.js'
 
 @inject()
@@ -28,7 +28,7 @@ export class NotificationService {
     ws.io?.emit(`notify.${userId}`, data)
   }
 
-  async index({ page, limit, id: userId }: IIndexRequest) {
+  async index({ page, limit, id: userId }: IIndexWithIdRequest) {
     const notifications = await Notification.query().where('userId', userId!).paginate(page, limit)
 
     return notifications.toJSON()

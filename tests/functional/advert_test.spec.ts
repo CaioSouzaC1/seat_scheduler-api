@@ -1,4 +1,6 @@
 import Advert from '#models/advert'
+import UserHasType from '#models/user_has_type'
+import UserType from '#models/user_type'
 import { makeAddress } from '#tests/utils/factories/make_address'
 import { makeAdvert } from '#tests/utils/factories/make_advert'
 import { makeCompany } from '#tests/utils/factories/make_company'
@@ -241,13 +243,14 @@ test.group('Advert test', (group) => {
       },
     })
   })
+})
 
-  test('[GET] /adverts/owns', async ({ client }) => {
+test.group('Adverts Client routes', (group) => {
+  group.each.setup(() => testUtils.db().migrate())
+  test('[GET] /adverts', async ({ client }) => {
     const address = await makeAddress()
 
     const user = await makeUser({
-      email: 'johndoe@mail.com',
-      password: '123',
       addressId: address.id,
     })
 
@@ -278,6 +281,21 @@ test.group('Advert test', (group) => {
       storeId: store.id,
     })
 
+    const userClient = await makeUser({
+      email: 'johndoe@mail.com',
+      password: '123',
+      addressId: address.id,
+    })
+
+    const type = await UserType.create({
+      name: 'client',
+    })
+
+    UserHasType.create({
+      userId: userClient.id,
+      typeId: type.id,
+    })
+
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
       password: '123',
@@ -285,7 +303,7 @@ test.group('Advert test', (group) => {
 
     const { token } = login.body().data
 
-    const result = await client.get('/adverts/owns').bearerToken(token)
+    const result = await client.get('/adverts/').bearerToken(token)
 
     result.assertStatus(200)
 

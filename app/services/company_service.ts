@@ -8,11 +8,11 @@ import { AddressService } from './address_service.js'
 import Company from '#models/company'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexWithIdRequest } from '../interfaces/ReturnApi/index.js'
 
 @inject()
 export class CompanyService {
-  constructor(private addressService: AddressService) {}
+  constructor(private addressService: AddressService) { }
 
   async store({
     cnpj,
@@ -120,7 +120,7 @@ export class CompanyService {
     return company
   }
 
-  async index({ page, limit, id: userId }: IIndexRequest) {
+  async index({ page, limit, id: userId }: IIndexWithIdRequest) {
     const companies = await Company.query()
       .preload('attachement')
       .preload('user')

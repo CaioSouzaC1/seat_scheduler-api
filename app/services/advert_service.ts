@@ -6,7 +6,7 @@ import {
   IUpdateAdvertRequest,
 } from '../interfaces/Requests/Advert/index.js'
 import { cuid } from '@adonisjs/core/helpers'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexRequest, IIndexWithIdsRequest } from '../interfaces/ReturnApi/index.js'
 
 export class AdvertService {
   async store({ name, type, images, companyId, storeId }: IStoreAdvertRequest) {
@@ -69,7 +69,7 @@ export class AdvertService {
     return advert.toJSON()
   }
 
-  async myOwn({ page, limit, ids: storeIds }: IIndexRequest) {
+  async myOwn({ page, limit, ids: storeIds }: IIndexWithIdsRequest) {
     const advert = await Advert.query()
       .preload('attachements')
       .preload('company')

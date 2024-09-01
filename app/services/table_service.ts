@@ -6,7 +6,7 @@ import {
   IStoreTableRequest,
   ITableIdRequest,
 } from '../interfaces/Requests/Table/index.js'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexWithIdRequest } from '../interfaces/ReturnApi/index.js'
 
 export class TableService {
   async storeInBulk({
@@ -61,7 +61,7 @@ export class TableService {
     await Table.query().where('store_id', storeId).whereIn('id', tables).delete()
   }
 
-  async index({ page, limit, id: storeId }: IIndexRequest) {
+  async index({ page, limit, id: storeId }: IIndexWithIdRequest) {
     const tables = await Table.query()
       .preload('store')
       .preload('booking')

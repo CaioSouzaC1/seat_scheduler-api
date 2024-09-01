@@ -7,7 +7,7 @@ import { editAdvertValidation, idAdvertValidation, storeAdvertValidation } from 
 
 @inject()
 export default class AdvertsController {
-  constructor(private adverService: AdvertService) {}
+  constructor(private adverService: AdvertService) { }
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -143,11 +143,17 @@ export default class AdvertsController {
     }
   }
 
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     try {
       const { limit, page } = request.qs()
+      let adverts
 
-      const adverts = await this.adverService.index({ page, limit })
+      if (auth.user?.type.some((type) => type.name === 'client')) {
+        adverts = await this.adverService.index({ page, limit })
+      } else {
+        const storeIds = auth.user?.store.map((store) => store.id)
+        adverts = await this.adverService.myOwn({ page, limit, ids: storeIds! })
+      }
 
       return ReturnApi.success({
         response,
@@ -155,28 +161,6 @@ export default class AdvertsController {
         message: 'Lista de anúncios',
       })
     } catch {
-      return ReturnApi.error({
-        response,
-        message: 'Error ao listar as anúncios',
-        code: 400,
-      })
-    }
-  }
-
-  async ownIndex({ request, response, auth }: HttpContext) {
-    try {
-      const { limit, page } = request.qs()
-
-      const storeIds = auth.user?.store.map((store) => store.id)
-      const adverts = await this.adverService.myOwn({ page, limit, ids: storeIds })
-
-      return ReturnApi.success({
-        response,
-        data: adverts,
-        message: 'Lista de anúncios',
-      })
-    } catch (e) {
-      console.log(e)
       return ReturnApi.error({
         response,
         message: 'Error ao listar as anúncios',

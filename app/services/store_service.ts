@@ -6,7 +6,7 @@ import {
   IStoreStoreRequest,
 } from '../interfaces/Requests/Store/index.js'
 import app from '@adonisjs/core/services/app'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexRequest, IIndexWithIdsRequest } from '../interfaces/ReturnApi/index.js'
 
 export class StoreService {
   async store({ name, phone, companyId, description, images, addressId }: IStoreStoreRequest) {
@@ -90,7 +90,7 @@ export class StoreService {
     return stores.toJSON()
   }
 
-  async myOwn({ page, limit, ids }: IIndexRequest) {
+  async myOwn({ page, limit, ids }: IIndexWithIdsRequest) {
     const stores = await Store.query()
       .preload('attachement')
       .preload('user')

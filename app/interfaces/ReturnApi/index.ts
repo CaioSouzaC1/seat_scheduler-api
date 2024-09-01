@@ -9,6 +9,12 @@ export default interface IReturnApiDTO {
 export interface IIndexRequest {
   page: number
   limit: number
-  id?: string
-  ids?: string[]
+}
+
+export interface IIndexWithIdRequest extends IIndexRequest {
+  id: string
+}
+
+export interface IIndexWithIdsRequest extends IIndexRequest {
+  ids: string[]
 }

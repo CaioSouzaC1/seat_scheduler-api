@@ -4,10 +4,10 @@ import {
   IStoreEvaluation,
   IUpdateEvaluation,
 } from '../interfaces/Requests/Evaluation/index.js'
-import { IIndexRequest } from '../interfaces/ReturnApi/index.js'
+import { IIndexWithIdRequest } from '../interfaces/ReturnApi/index.js'
 
 export class EvaluationService {
-  async index({ page, limit, id: userId }: IIndexRequest) {
+  async index({ page, limit, id: userId }: IIndexWithIdRequest) {
     const evaluation = await Evaluation.query()
       .preload('store')
       .preload('user')
