@@ -50,3 +50,11 @@ export const idBookingRequest = vine.compile(
     }),
   })
 )
+
+export const inderBookingRequest = vine.compile(
+  vine.object({
+    limit: vine.number(),
+    page: vine.number(),
+    status: vine.enum(['available', 'scheduled', 'busy']),
+  })
+)

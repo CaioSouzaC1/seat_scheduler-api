@@ -15,13 +15,11 @@ export default class extends BaseSeeder {
   async run() {
     const address = await makeAddress()
 
-    const companyUser = await makeUser({
-      addressId: address.id,
-    })
+    const user = await User.firstOrFail()
 
     const company = await makeCompany({
       addressId: address.id,
-      userId: companyUser.id,
+      userId: user.id,
     })
 
     const imagePath = join(resolve(), '/tests/utils/', 'dog-marine.jpg')
@@ -51,8 +49,6 @@ export default class extends BaseSeeder {
       storeId: store.id,
       type: 'xd',
     })
-
-    const user = await User.firstOrFail()
 
     await StoreUser.create({
       id: randomUUID(),

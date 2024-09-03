@@ -4,6 +4,7 @@ import { errors } from '@vinejs/vine'
 import {
   editBookingValidation,
   idBookingRequest,
+  inderBookingRequest,
   storeBookingValidation,
 } from '#validators/booking'
 import { inject } from '@adonisjs/core'
@@ -11,15 +12,15 @@ import { BookingService } from '#services/booking_service'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) { }
+  constructor(private bookingService: BookingService) {}
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const { limit, page } = request.qs()
+      const { limit, page, status } = await request.validateUsing(inderBookingRequest)
 
       const storeIds = auth.user?.store.map((store) => store.id)
 
-      const bookings = await this.bookingService.index({ page, limit, ids: storeIds! })
+      const bookings = await this.bookingService.index({ page, limit, ids: storeIds!, status })
 
       return ReturnApi.success({
         response,
@@ -30,7 +31,7 @@ export default class BookingsController {
       console.log(err)
       return ReturnApi.error({
         response,
-        message: 'Error no reserva',
+        message: 'Erro ao consultar reservas',
         code: 400,
       })
     }

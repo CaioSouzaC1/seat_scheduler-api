@@ -18,3 +18,11 @@ export interface IIndexWithIdRequest extends IIndexRequest {
 export interface IIndexWithIdsRequest extends IIndexRequest {
   ids: string[]
 }
+
+export interface IIndexWithStatusRequest extends IIndexRequest {
+  status: 'available' | 'scheduled' | 'busy'
+}
+
+export interface IIndexWithStatusAndIdsRequest
+  extends IIndexWithIdsRequest,
+    IIndexWithStatusRequest {}

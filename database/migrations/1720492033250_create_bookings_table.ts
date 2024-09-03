@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
 
-      table.enum('status', ['disponível', 'reservado', 'indisponivel']).defaultTo('disponível')
+      table.enum('status', ['available', 'scheduled', 'busy']).defaultTo('available')
       table.string('observation').nullable()
       table.string('reserved_date').notNullable()
 
