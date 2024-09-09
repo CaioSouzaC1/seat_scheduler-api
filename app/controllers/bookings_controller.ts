@@ -18,9 +18,14 @@ export default class BookingsController {
     try {
       const { limit, page, status } = await request.validateUsing(inderBookingRequest)
 
-      const storeIds = auth.user?.store.map((store) => store.id)
+      let bookings
 
-      const bookings = await this.bookingService.index({ page, limit, ids: storeIds!, status })
+      if (auth.user?.type.some((userType) => userType.name === 'client')) {
+        bookings = await this.bookingService.my({ page, limit, status, userId: auth.user.id! })
+      } else {
+        const storeIds = auth.user?.store.map((store) => store.id)
+        bookings = await this.bookingService.index({ page, limit, ids: storeIds!, status })
+      }
 
       return ReturnApi.success({
         response,

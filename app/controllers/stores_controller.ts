@@ -163,7 +163,7 @@ export default class StoresController {
       const { limit, page } = request.qs()
       let stores
 
-      if (auth.user?.type.some(() => type.name === 'client')) {
+      if (auth.user?.type.some((userType) => userType.name === 'client')) {
         const storeIds = auth.user?.store.map((store) => store.id)
         stores = await this.storeService.myOwn({ page, limit, ids: storeIds })
       } else stores = await this.storeService.index({ page, limit })

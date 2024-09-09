@@ -5,6 +5,7 @@ import {
   IStoreBookingRequest,
 } from '../interfaces/Requests/Booking/index.js'
 import {
+  IIndexRequestWithUserId,
   IIndexWithIdsRequest,
   IIndexWithStatusAndIdsRequest,
   IIndexWithStatusRequest,
@@ -70,6 +71,20 @@ export class BookingService {
       .where('status', status)
       .whereHas('store', (storeQuery) => {
         storeQuery.whereIn('id', storeIds!)
+      })
+      .paginate(page, limit)
+
+    return bookings.toJSON()
+  }
+
+  async my({ page, limit, status, userId }: IIndexRequestWithUserId) {
+    const bookings = await Booking.query()
+      .preload('store')
+      .preload('user')
+      .preload('table')
+      .where('status', status)
+      .whereHas('user', (userQuery) => {
+        userQuery.where('id', userId)
       })
       .paginate(page, limit)
 
