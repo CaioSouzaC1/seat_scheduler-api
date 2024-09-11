@@ -77,12 +77,11 @@ export class BookingService {
     return bookings.toJSON()
   }
 
-  async my({ page, limit, status, userId }: IIndexRequestWithUserId) {
+  async my({ page, limit, userId }: IIndexRequestWithUserId) {
     const bookings = await Booking.query()
       .preload('store')
       .preload('user')
       .preload('table')
-      .where('status', status)
       .whereHas('user', (userQuery) => {
         userQuery.where('id', userId)
       })

@@ -27,6 +27,6 @@ export interface IIndexWithStatusAndIdsRequest
   extends IIndexWithIdsRequest,
     IIndexWithStatusRequest {}
 
-export interface IIndexRequestWithUserId extends IIndexRequest, IIndexWithStatusRequest {
+export interface IIndexRequestWithUserId extends IIndexRequest {
   userId: string
 }
