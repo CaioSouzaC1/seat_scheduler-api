@@ -50,7 +50,7 @@ test.group('Evaluation test', (group) => {
     const evaluationOnDatabase = Evaluation.first()
 
     assert.isOk(evaluationOnDatabase)
-  }).skip()
+  })
 
   test('[GET] /evaluations/:id', async ({ client }) => {
     const address = await makeAddress()

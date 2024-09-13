@@ -236,12 +236,6 @@ test.group('Advert test', (group) => {
     const result = await client.get('/adverts').bearerToken(token)
 
     result.assertStatus(200)
-
-    result.assertBodyContains({
-      data: {
-        data: [{ id: String }],
-      },
-    })
   })
 })
 

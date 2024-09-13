@@ -269,21 +269,27 @@ test.group('Table test', (group) => {
   })
 
   test('[DELETE] /tables', async ({ client }) => {
-    await makeUser({
+    const address = await makeAddress()
+
+    const user = await makeUser({
       email: 'johndoe@mail.com',
       password: '123',
+      addressId: address.id,
     })
-
-    const table = await makeTable()
 
     const login = await client.post('/login').json({
       email: 'johndoe@mail.com',
       password: '123',
     })
 
-    const company = await makeCompany({ name: 'company' })
+    const company = await makeCompany({ name: 'company', addressId: address.id, userId: user.id })
 
-    const store = await makeStore({ name: 'store', companyId: company.id })
+    const store = await makeStore({ name: 'store', companyId: company.id, addressId: address.id })
+
+    const table = await makeTable({
+      numberOfChairs: 2,
+      storeId: store.id,
+    })
 
     const body = { storeId: store.id, tables: [table.id] }
 
@@ -292,5 +298,5 @@ test.group('Table test', (group) => {
     const result = await client.delete(`/tables`).json(body).bearerToken(token)
 
     result.assertStatus(200)
-  }).skip()
+  })
 })

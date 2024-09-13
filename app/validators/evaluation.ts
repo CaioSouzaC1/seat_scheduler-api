@@ -4,7 +4,6 @@ export const storeEvaluationValidation = vine.compile(
   vine.object({
     note: vine.number().min(0).max(10),
     description: vine.string(),
-
     storeId: vine
       .string()
       .uuid()

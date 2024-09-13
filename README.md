@@ -1,32 +1,32 @@
 # Seat Scheduler API
 
-The app allows diners to easily book tables for specific dates and times, with options to customize their reservations by selecting seating preferences and noting special requests. Reservations are confirmed instantly, and modifications are straightforward.
+**Seat Scheduler API** é a API que alimenta o sistema de reservas de mesas para restaurantes. Foi desenvolvida utilizando **AdonisJS** e **TypeScript**, oferecendo endpoints para o gerenciamento de empresas, lojas, mesas e reservas. Inclui validações robustas utilizando **Vine** e testes automatizados com **Japa**.
 
-For restaurant managers, the app offers tools to assign tables, monitor real-time availability, and communicate directly with guests. It also tracks customer preferences, facilitating personalized service and improving dining experiences overall.
-## Tech Stack
+## Tecnologias Utilizadas
+- **AdonisJS** - Framework Node.js MVC para construção de APIs eficientes.
+- **TypeScript** - Tipagem estática para maior segurança no código.
+- **Vine** - Validações flexíveis e seguras.
+- **Japa** - Framework de testes para garantir a qualidade da API.
 
-- [Node.Js](https://nodejs.org/en/download/package-manager) v20.15.0
-- [AdonisJS](https://adonisjs.com) v6
-- [Docker](https://docs.docker.com/get-docker/) v25.0.3
-- [Postgresql](https://www.postgresql.org) v16.3
+## Funcionalidades
+- Autenticação JWT para segurança das rotas.
+- Gerenciamento de empresas, lojas e mesas.
+- Criação, listagem e cancelamento de reservas.
+- Validação de dados com Vine.
+- Testes automatizados para validação das rotas e lógica de negócios.
 
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/CaioSouzaC1/seat_scheduler-api
-  cd seat_scheduler-api
-  pnpm install
-  cp .env.example .env
-  pnpm dev
-```
-
-
-## Running Tests
-
-To run tests, run the following command
+## Testes Automatizados
+Os testes são escritos com **Japa**, garantindo a funcionalidade e integridade da API. Para rodar os testes:
 
 ```bash
-  pnpm dev
+node ace test
 ```
+
+Os testes cobrem:
+- Autenticação.
+- Operações de CRUD para empresas, lojas e mesas.
+- Criação e cancelamento de reservas.
+
+## Testes
+
+![Tests](app/readme/tests.png)

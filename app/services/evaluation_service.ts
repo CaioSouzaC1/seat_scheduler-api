@@ -19,8 +19,8 @@ export class EvaluationService {
     return evaluation.toJSON()
   }
 
-  async store({ note, description }: IStoreEvaluation) {
-    await Evaluation.create({ note, description })
+  async store({ note, description, userId, storeId }: IStoreEvaluation) {
+    await Evaluation.create({ note, description, userId, storeId })
   }
 
   async update({ description, note, evaluationId }: IUpdateEvaluation) {

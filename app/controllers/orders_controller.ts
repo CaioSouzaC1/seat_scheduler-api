@@ -7,7 +7,7 @@ import { OrderService } from '#services/order_service'
 
 @inject()
 export default class OrdersController {
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService) {}
 
   async store({ request, response, auth }: HttpContext) {
     try {

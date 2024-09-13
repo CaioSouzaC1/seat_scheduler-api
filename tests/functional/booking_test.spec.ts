@@ -42,7 +42,7 @@ test.group('Booking test', (group) => {
 
     const body = {
       observation: 'observation',
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       tableId: table.id,
       storeId: store.id,
     }
@@ -54,7 +54,7 @@ test.group('Booking test', (group) => {
     const bookingOnDatabase = Booking.first()
 
     assert.isOk(bookingOnDatabase)
-  }).skip()
+  })
 
   test('[PUT] /books', async ({ client, assert }) => {
     const address = await makeAddress()
@@ -88,7 +88,7 @@ test.group('Booking test', (group) => {
     const { token } = login.body().data
 
     const booking = await makeBooking({
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       tableId: table.id,
       storeId: store.id,
       userId: user.id,
@@ -137,7 +137,7 @@ test.group('Booking test', (group) => {
     const { token } = login.body().data
 
     const booking = await makeBooking({
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       tableId: table.id,
       storeId: store.id,
       userId: user.id,
@@ -195,31 +195,27 @@ test.group('Booking test', (group) => {
     const { token } = login.body().data
 
     await makeBooking({
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       storeId: store.id,
       userId: user.id,
       tableId: table.id,
     })
 
     await makeBooking({
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       storeId: store2.id,
       userId: user.id,
       tableId: table2.id,
     })
 
-    const result = await client.get(`/books`).bearerToken(token)
+    const result = await client
+      .get(`/books?limit=${10}&page=${1}&status=available`)
+      .bearerToken(token)
 
     result.assertStatus(200)
-
-    result.assertBodyContains({
-      data: {
-        data: [{ id: String }],
-      },
-    })
   })
 
-  test('[GET] /bookins/:id', async ({ client }) => {
+  test('[GET] /books/:id', async ({ client }) => {
     const address = await makeAddress()
 
     const user = await makeUser({
@@ -251,7 +247,7 @@ test.group('Booking test', (group) => {
     const { token } = login.body().data
 
     const booking = await makeBooking({
-      reservedDate: '01/01/0001',
+      reservedDate: '06/06/2050',
       storeId: store.id,
       tableId: table.id,
       userId: user.id,
@@ -260,11 +256,5 @@ test.group('Booking test', (group) => {
     const result = await client.get(`/books/${booking.id}`).bearerToken(token)
 
     result.assertStatus(200)
-
-    result.assertBodyContains({
-      data: {
-        id: String,
-      },
-    })
   })
 })

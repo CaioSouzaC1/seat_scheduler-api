@@ -2,6 +2,8 @@
 export interface IStoreEvaluation {
   note: number
   description?: string
+  userId: string
+  storeId: string
 }
 
 export interface IUpdateEvaluation {

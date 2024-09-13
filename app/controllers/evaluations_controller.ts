@@ -11,13 +11,13 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class EvaluationsController {
-  constructor(private evaluationService: EvaluationService) { }
+  constructor(private evaluationService: EvaluationService) {}
 
-  async store({ response, request }: HttpContext) {
+  async store({ response, request, auth }: HttpContext) {
     try {
-      const { note, description } = await request.validateUsing(storeEvaluationValidation)
+      const { note, description, storeId } = await request.validateUsing(storeEvaluationValidation)
 
-      await this.evaluationService.store({ note, description })
+      await this.evaluationService.store({ note, description, userId: auth.user!.id, storeId })
 
       return ReturnApi.success({
         response,
@@ -25,6 +25,7 @@ export default class EvaluationsController {
         message: 'Obrigado pela avalição',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

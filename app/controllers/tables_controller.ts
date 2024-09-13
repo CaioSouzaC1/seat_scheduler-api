@@ -207,6 +207,7 @@ export default class TablesController {
         message: 'Mesas apagadas com sucesso!',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
