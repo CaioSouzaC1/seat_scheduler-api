@@ -1,12 +1,13 @@
 # Seat Scheduler API
 
-**Seat Scheduler API** é a API que alimenta o sistema de reservas de mesas para restaurantes. Foi desenvolvida utilizando **AdonisJS** e **TypeScript**, oferecendo endpoints para o gerenciamento de empresas, lojas, mesas e reservas. Inclui validações robustas utilizando **Vine** e testes automatizados com **Japa**.
+**Seat Scheduler API** é a API que alimenta o sistema de reservas de mesas para restaurantes. Foi desenvolvida utilizando **AdonisJS** e **TypeScript**, oferecendo endpoints para o gerenciamento de empresas, lojas, mesas e reservas. Inclui validações robustas utilizando **Vine**, testes automatizados com **Japa** e Banco de dados **PostgreSQL**.
 
 ## Tecnologias Utilizadas
 - **AdonisJS** - Framework Node.js MVC para construção de APIs eficientes.
 - **TypeScript** - Tipagem estática para maior segurança no código.
 - **Vine** - Validações flexíveis e seguras.
 - **Japa** - Framework de testes para garantir a qualidade da API.
+- **PostgreSQL** - Banco de dados relacional de alta performance.
 
 ## Funcionalidades
 - Autenticação JWT para segurança das rotas.
@@ -29,3 +30,4 @@ Os testes cobrem:
 - Operações de CRUD para empresas, lojas e mesas.
 - Criação e cancelamento de reservas.
 
+##
