@@ -22,11 +22,10 @@ Os testes são escritos com **Japa**, garantindo a funcionalidade e integridade 
 node ace test
 ```
 
+![Tests](app/readme/tests.png)
+
 Os testes cobrem:
 - Autenticação.
 - Operações de CRUD para empresas, lojas e mesas.
 - Criação e cancelamento de reservas.
 
-## Testes
-
-![Tests](app/readme/tests.png)
