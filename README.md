@@ -30,4 +30,7 @@ Os testes cobrem:
 - Operações de CRUD para empresas, lojas e mesas.
 - Criação e cancelamento de reservas.
 
-##
+## Banco de dados
+Estrutura do banco de dados e relacionamentos foi montada no MIRO.
+
+![Tests](app/readme/database.png)
