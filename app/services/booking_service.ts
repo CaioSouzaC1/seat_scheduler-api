@@ -6,9 +6,7 @@ import {
 } from '../interfaces/Requests/Booking/index.js'
 import {
   IIndexRequestWithUserId,
-  IIndexWithIdsRequest,
   IIndexWithStatusAndIdsRequest,
-  IIndexWithStatusRequest,
 } from '../interfaces/ReturnApi/index.js'
 import ws from './ws.js'
 
