@@ -61,6 +61,7 @@ export default class StoresController {
         message: 'Loja criado com sucesso!',
       })
     } catch (err) {
+      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
@@ -160,20 +161,23 @@ export default class StoresController {
 
   async index({ request, response, auth }: HttpContext) {
     try {
-      const { limit, page } = request.qs()
+      const { limit, page, search, orderBy } = request.qs()
       let stores
 
       if (auth.user?.type.some((userType) => userType.name === 'client')) {
-        const storeIds = auth.user?.store.map((store) => store.id)
+        stores = await this.storeService.index({ page, limit, search, orderBy })
+      } else {
+        const storeIds = auth.user?.store.map((store) => store.id) ?? []
         stores = await this.storeService.myOwn({ page, limit, ids: storeIds })
-      } else stores = await this.storeService.index({ page, limit })
+      }
 
       return ReturnApi.success({
         response,
         data: stores,
         message: 'Lista de loja!',
       })
-    } catch {
+    } catch (err) {
+      console.log(err)
       return ReturnApi.error({
         response,
         message: 'Error ao listar as lojas',

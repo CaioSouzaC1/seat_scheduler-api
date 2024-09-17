@@ -186,7 +186,12 @@ export class UserService {
       name,
       phone,
       password,
+      addressId: address.id,
     })
+
+    const userType = await UserType.findBy('name', 'client')
+
+    if (userType) await user.related('type').attach([userType.id])
 
     await user.related('address').associate(address)
 

@@ -30,3 +30,8 @@ export interface IIndexWithStatusAndIdsRequest
 export interface IIndexRequestWithUserId extends IIndexRequest {
   userId: string
 }
+
+export interface IIndexResquestWithSearchAndOrder extends IIndexRequest {
+  search?: string
+  orderBy?: string
+}
