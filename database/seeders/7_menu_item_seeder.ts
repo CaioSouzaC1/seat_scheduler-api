@@ -9,10 +9,10 @@ export default class extends BaseSeeder {
 
     for (let i = 0; i < 10; i++) {
       await MenuItem.create({
-        name: faker.company.name(),
-        description: faker.lorem.sentence(5),
+        name: faker.food.dish(),
+        description: faker.food.description(),
         storeId: store!.id,
-        price: faker.string.numeric(2),
+        price: faker.number.float({ min: 10, max: 100, multipleOf: 0.02 }),
       })
     }
   }

@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
 
       table.string('name').notNullable()
-      table.float('price').notNullable()
+      table.float('price', 2).notNullable()
       table.string('description').notNullable()
 
       table.uuid('store_id').references('stores.id').onDelete('CASCADE').notNullable()
