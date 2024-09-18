@@ -34,3 +34,7 @@ Os testes cobrem:
 Estrutura do banco de dados e relacionamentos foi montada no MIRO.
 
 ![Tests](app/readme/database.png)
+
+## Postman
+
+https://www.postman.com/caiosouza-team/seatscheduler/collection/kpbgzwe/seatscheduler
