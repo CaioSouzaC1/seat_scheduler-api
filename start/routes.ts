@@ -23,6 +23,7 @@ import '../routes/evaluation.routes.ts'
 import '../routes/advert.routes.ts'
 import '../routes/notification.routes.ts'
 import '../routes/dashboard.routes.ts'
+import '../routes/menu_items.routes.ts'
 
 import ws from '#services/ws'
 
