@@ -80,6 +80,7 @@ export class StoreService {
       .preload('advert')
       .preload('address')
       .preload('company')
+      .preload('menuItem')
       .where('id', storeId)
       .first()
   }
