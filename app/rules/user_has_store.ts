@@ -5,7 +5,7 @@ type Options = {
   userId: string
 }
 async function userHasStore(value: unknown, options: Options, field: FieldContext) {
-  console.log(options)
+
   const row = await db.from('store_user').where({ user_id: options.userId, storeId: value }).first()
 
   if (row) {

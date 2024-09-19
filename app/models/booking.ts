@@ -52,21 +52,7 @@ export default class Booking extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  static async createUuid(model: User) {
+  static async createUuid(model: Booking) {
     model.id = randomUUID()
-  }
-
-  @beforeFind()
-  static bringRelation(query: ModelQueryBuilderContract<typeof Booking>) {
-    query.preload('store')
-    query.preload('user')
-    query.preload('table')
-  }
-
-  @beforeFetch()
-  static bringRelationMany(query: ModelQueryBuilderContract<typeof Booking>) {
-    query.preload('store')
-    query.preload('user')
-    query.preload('table')
   }
 }

@@ -7,7 +7,7 @@ import { OrderService } from '#services/order_service'
 
 @inject()
 export default class OrdersController {
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService) { }
 
   async store({ request, response, auth }: HttpContext) {
     try {
@@ -21,7 +21,7 @@ export default class OrdersController {
         message: 'Pedido anotado com sucesso!',
       })
     } catch (err) {
-      console.log(err)
+
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
@@ -52,7 +52,7 @@ export default class OrdersController {
         message: 'Lista de pedidos',
       })
     } catch (err) {
-      console.log(err)
+
       return ReturnApi.error({
         response,
         message: 'Error ao listar o pedido',

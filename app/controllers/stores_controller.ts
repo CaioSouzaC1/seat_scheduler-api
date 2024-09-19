@@ -12,7 +12,7 @@ export default class StoresController {
   constructor(
     private storeService: StoreService,
     private addressService: AddressService
-  ) {}
+  ) { }
 
   async store({ request, response, auth }: HttpContext) {
     try {
@@ -61,7 +61,7 @@ export default class StoresController {
         message: 'Loja criado com sucesso!',
       })
     } catch (err) {
-      console.log(err)
+
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
@@ -177,7 +177,7 @@ export default class StoresController {
         message: 'Lista de loja!',
       })
     } catch (err) {
-      console.log(err)
+
       return ReturnApi.error({
         response,
         message: 'Error ao listar as lojas',

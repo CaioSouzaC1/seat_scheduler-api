@@ -14,7 +14,7 @@ import { idStoreValidation } from '#validators/store'
 
 @inject()
 export default class TablesController {
-  constructor(private tableService: TableService) {}
+  constructor(private tableService: TableService) { }
 
   async storeInBulk({ response, request }: HttpContext) {
     try {
@@ -207,7 +207,6 @@ export default class TablesController {
         message: 'Mesas apagadas com sucesso!',
       })
     } catch (err) {
-      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

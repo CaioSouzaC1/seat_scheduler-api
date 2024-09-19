@@ -17,6 +17,7 @@ import User from './user.js'
 import Evaluation from './evaluation.js'
 import Advert from './advert.js'
 import MenuItem from './menu_item.js'
+import Table from './table.js'
 
 export default class Store extends BaseModel {
   @column({ isPrimary: true })
@@ -57,6 +58,9 @@ export default class Store extends BaseModel {
 
   @hasMany(() => MenuItem)
   declare menuItem: HasMany<typeof MenuItem>
+
+  @hasMany(() => Table)
+  declare tables: HasMany<typeof Table>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

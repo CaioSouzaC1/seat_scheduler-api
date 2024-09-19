@@ -6,7 +6,7 @@ import ReturnApi from '../utils/return_api.js'
 
 @inject()
 export default class DashboardController {
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService) { }
 
   async cards({ response, auth }: HttpContext) {
     try {
@@ -21,7 +21,7 @@ export default class DashboardController {
         message: 'Dados dos cards',
       })
     } catch (err) {
-      console.log(err)
+
       return ReturnApi.error({
         response,
         message: 'Error ao listar as anúncios',
@@ -42,7 +42,7 @@ export default class DashboardController {
         message: 'Dados dos cards',
       })
     } catch (err) {
-      console.log(err)
+
       return ReturnApi.error({
         response,
         message: 'Error ao listar as anúncios',

@@ -7,7 +7,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class UsersController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   /**
    * Handle form submission for the create action
@@ -57,7 +57,7 @@ export default class UsersController {
         message: 'Usuário criado com sucesso!',
       })
     } catch (err) {
-      console.log(err)
+
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,
@@ -207,7 +207,7 @@ export default class UsersController {
         message: 'Usuário criado com sucesso!',
       })
     } catch (err) {
-      console.log(err)
+
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

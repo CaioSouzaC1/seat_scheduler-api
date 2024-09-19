@@ -11,7 +11,7 @@ import { errors } from '@vinejs/vine'
 
 @inject()
 export default class EvaluationsController {
-  constructor(private evaluationService: EvaluationService) {}
+  constructor(private evaluationService: EvaluationService) { }
 
   async store({ response, request, auth }: HttpContext) {
     try {
@@ -25,7 +25,7 @@ export default class EvaluationsController {
         message: 'Obrigado pela avalição',
       })
     } catch (err) {
-      console.log(err)
+
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

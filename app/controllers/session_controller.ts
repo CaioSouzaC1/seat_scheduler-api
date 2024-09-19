@@ -7,32 +7,42 @@ import ReturnApi from '../utils/return_api.js'
 
 @inject()
 export default class SessionController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   async login({ request, response }: HttpContext) {
-    const { email, password } = await authSesssionValidator.validate(request.body())
+    try {
+      const { email, password } = await authSesssionValidator.validate(request.body())
 
-    let user = await this.userService.findByEmail({ email })
+      let user = await this.userService.findByEmail({ email })
 
-    if (!user) return ReturnApi.error({ response, message: 'Usuário não encontrado!', code: 400 })
+      if (!user) return ReturnApi.error({ response, message: 'Usuário não encontrado!', code: 400 })
 
-    const isPasswordValid = await hash.verify(user!.password, password)
+      const isPasswordValid = await hash.verify(user!.password, password)
 
-    if (!isPasswordValid)
-      return ReturnApi.error({ response, message: 'Usuário ou senha inválidos!', code: 400 })
+      if (!isPasswordValid)
+        return ReturnApi.error({ response, message: 'Usuário ou senha inválidos!', code: 400 })
 
-    await this.userService.countLogin(user!)
+      await this.userService.countLogin(user!)
 
-    user = await this.userService.lastLogin(user!)
+      user = await this.userService.lastLogin(user!)
 
-    const token = await this.userService.createToken(user!)
+      const token = await this.userService.createToken(user!)
 
-    return ReturnApi.success({
-      response,
-      data: { user, token },
-      message: 'Usuário logado com sucesso!',
-      code: 200,
-    })
+      return ReturnApi.success({
+        response,
+        data: { user, token },
+        message: 'Usuário logado com sucesso!',
+        code: 200,
+      })
+    } catch (e) {
+      console.log(e)
+      return ReturnApi.error({
+        response,
+        message: 'Error ao logar',
+        data: null,
+        code: 400,
+      })
+    }
   }
 
   async me({ auth, response }: HttpContext) {

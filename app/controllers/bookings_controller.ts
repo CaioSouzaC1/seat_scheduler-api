@@ -12,7 +12,7 @@ import { BookingService } from '#services/booking_service'
 
 @inject()
 export default class BookingsController {
-  constructor(private bookingService: BookingService) {}
+  constructor(private bookingService: BookingService) { }
 
   async index({ request, response, auth }: HttpContext) {
     try {
@@ -33,7 +33,6 @@ export default class BookingsController {
         message: 'Lista de reservas',
       })
     } catch (err) {
-      console.log(err)
       return ReturnApi.error({
         response,
         message: 'Erro ao consultar reservas',
@@ -61,7 +60,6 @@ export default class BookingsController {
         message: 'Aguarde a resposta da reserva',
       })
     } catch (err) {
-      console.log(err)
       if (err instanceof errors.E_VALIDATION_ERROR) {
         return ReturnApi.error({
           response,

@@ -81,6 +81,7 @@ export class StoreService {
       .preload('address')
       .preload('company')
       .preload('menuItem')
+      .preload('tables')
       .where('id', storeId)
       .first()
   }
